@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Seu Resultado - Solução Personalizada</title>
+    <link rel="stylesheet" href="/css/styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <main class="main-content flex flex-col gap-4 md:gap-6 justify-center p-3 md:p-5 min-h-[95svh] inherited-styles-for-exported-element">
+        
+        <!-- Resultado -->
+        <div class="w-full relative mx-auto max-w-[32rem]">
+            <div class="flex flex-row flex-wrap" style="margin-left: -0.2rem; margin-right: -0.2rem;">
+                
+                <!-- Título do Resultado -->
+                <div class="relative min-w-0 self-auto mb-6" style="padding: 0.2rem; flex-basis: 100%;">
+                    <div class="py-1">
+                        <div class="content text break-words py-2" style="word-break: break-word;">
+                            <h1 class="ql-align-center text-3xl md:text-4xl"><strong>🎉 Parabéns!</strong></h1>
+                            <h2 class="ql-align-center mt-4"><strong>Baseado nas suas respostas, encontramos a solução perfeita para você!</strong></h2>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Card de Resultado -->
+                <div class="relative min-w-0 self-auto mb-6" style="padding: 0.2rem; flex-basis: 100%;">
+                    <div class="bg-gradient-to-br from-pink-50 to-pink-100 rounded-2xl p-6 border border-pink-200">
+                        <h3 class="text-xl font-bold text-center mb-4 text-gray-800">Seu Perfil:</h3>
+                        
+                        <div class="grid gap-3 text-sm">
+                            <div class="flex justify-between">
+                                <span class="font-medium">Tempo de luta:</span>
+                                <span><%= answers[1] %></span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="font-medium">Principal problema:</span>
+                                <span><%= answers[2] %></span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="font-medium">Tentativas anteriores:</span>
+                                <span><%= answers[3] %></span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="font-medium">Faixa etária:</span>
+                                <span><%= answers[4] %></span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="font-medium">Meta de peso:</span>
+                                <span><%= answers[5] %></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Imagem do Produto -->
+                <div class="relative min-w-0 self-auto mb-6" style="padding: 0.2rem; flex-basis: 100%;">
+                    <div style="position: relative; width: 100%; overflow: hidden; padding-bottom: 60%;">
+                        <img src="https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80" alt="Produto" class="max-w-full rounded-2xl" style="position: absolute; top: 0px; left: 0px; width: 100%; height: 100%; object-fit: cover;">
+                    </div>
+                </div>
+
+                <!-- Benefícios -->
+                <div class="relative min-w-0 self-auto mb-6" style="padding: 0.2rem; flex-basis: 100%;">
+                    <div class="content text break-words py-2">
+                        <h3 class="text-xl font-bold text-center mb-4">✨ O que você vai conseguir:</h3>
+                        <ul class="space-y-2 text-left">
+                            <li class="flex items-center gap-2">
+                                <span class="text-pink-500">✓</span>
+                                Eliminar a barriga estufada em 30 dias
+                            </li>
+                            <li class="flex items-center gap-2">
+                                <span class="text-pink-500">✓</span>
+                                Reduzir gordura localizada naturalmente
+                            </li>
+                            <li class="flex items-center gap-2">
+                                <span class="text-pink-500">✓</span>
+                                Acelerar o metabolismo
+                            </li>
+                            <li class="flex items-center gap-2">
+                                <span class="text-pink-500">✓</span>
+                                Ter mais energia e disposição
+                            </li>
+                            <li class="flex items-center gap-2">
+                                <span class="text-pink-500">✓</span>
+                                Recuperar a autoestima
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Oferta Especial -->
+                <div class="relative min-w-0 self-auto mb-6" style="padding: 0.2rem; flex-basis: 100%;">
+                    <div class="bg-red-50 border-2 border-red-200 rounded-2xl p-4 text-center">
+                        <h4 class="font-bold text-red-600 mb-2">🔥 OFERTA ESPECIAL - APENAS HOJE!</h4>
+                        <p class="text-red-700 font-medium">De <span class="line-through">R$ 297</span> por apenas</p>
+                        <p class="text-3xl font-bold text-red-600">R$ 97</p>
+                        <p class="text-sm text-red-600 mt-1">Desconto de 67% - Válido apenas para as próximas 2 horas!</p>
+                    </div>
+                </div>
+
+                <!-- Timer -->
+                <div class="relative min-w-0 self-auto mb-6" style="padding: 0.2rem; flex-basis: 100%;">
+                    <div class="bg-gray-800 text-white rounded-xl p-4 text-center">
+                        <p class="mb-2 font-medium">Essa oferta expira em:</p>
+                        <div id="countdown" class="text-2xl font-bold text-pink-400">02:00:00</div>
+                    </div>
+                </div>
+
+                <!-- CTA Button -->
+                <div class="relative min-w-0 self-auto" style="padding: 0.2rem; flex-basis: 100%;">
+                    <div class="mx-auto relative max-w-[28rem]">
+                        <div class="ease effect-bubble mb-2 hover:-mt-1 hover:pb-1 ease group/button grid relative">
+                            <div id="pulse01pG78" class="jsx-93027705 absolute rounded-2xl w-full h-full btn-theme"></div>
+                            <div class="rounded-2xl absolute btn-theme overflow-hidden w-full h-full top-0 left-0 mt-2 ease">
+                                <div class="absolute ease w-full h-full top-0 left-0 bg-zinc-950 opacity-30 group-hover/button:opacity-35"></div>
+                            </div>
+                            <a href="/produto" class="btn relative active:scale-[.99] rounded-2xl btn-theme block text-center no-underline">
+                                🛒 QUERO GARANTIR MINHA TRANSFORMAÇÃO
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Garantia -->
+                <div class="relative min-w-0 self-auto mt-4" style="padding: 0.2rem; flex-basis: 100%;">
+                    <div class="text-center text-sm text-gray-600">
+                        <p>🛡️ <strong>Garantia de 30 dias</strong> - Satisfação total ou seu dinheiro de volta!</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+    </main>
+
+    <script src="/js/script.js"></script>
+    <script>
+        // Countdown Timer
+        let timeLeft = 2 * 60 * 60; // 2 horas em segundos
+        
+        function updateCountdown() {
+            const hours = Math.floor(timeLeft / 3600);
+            const minutes = Math.floor((timeLeft % 3600) / 60);
+            const seconds = timeLeft % 60;
+            
+            document.getElementById('countdown').textContent = 
+                `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+            
+            if (timeLeft > 0) {
+                timeLeft--;
+            }
+        }
+        
+        updateCountdown();
+        setInterval(updateCountdown, 1000);
+    </script>
+</body>
+</html>
