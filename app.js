@@ -4,7 +4,7 @@ const cookieParser = require('cookie-parser');
 const path = require('path');
 
 const app = express();
-const PORT = process.env.PORT || 3001;
+const PORT = process.env.PORT || 8080;
 
 // Configurações do Express
 app.set('view engine', 'ejs');
@@ -26,63 +26,128 @@ app.use(session({
 const quizData = [
   {
     id: 1,
-    question: "Há quanto tempo você luta contra a barriga estufada?",
-    options: [
-      "Menos de 6 meses",
-      "Entre 6 meses e 1 ano",
-      "Entre 1 e 2 anos",
-      "Mais de 2 anos"
-    ]
+    question: "Qual seu peso atualmente?",
+    type: "slider",
+    style: "weight",
+    options: {
+      min: 40,
+      max: 150,
+      default: 70,
+      unit: "kg",
+      step: 1
+    }
   },
   {
     id: 2,
-    question: "Qual é o seu principal problema com gordura localizada?",
+    question: "Há quanto tempo você luta contra a barriga estufada?",
+    type: "single",
+    style: "gradient",
     options: [
-      "Barriga saliente",
-      "Culotes e coxas",
-      "Braços flácidos",
-      "Múltiplas áreas"
+      { text: "Menos de 6 meses", emoji: "😐", gradient: "gradient-blue" },
+      { text: "Entre 6 meses e 1 ano", emoji: "😕", gradient: "gradient-green" },
+      { text: "Entre 1 e 2 anos", emoji: "😟", gradient: "gradient-purple" },
+      { text: "Mais de 2 anos", emoji: "😢", gradient: "gradient-pink" }
     ]
   },
   {
     id: 3,
-    question: "Você já tentou algum método para emagrecer?",
+    question: "Quantas gestações você já teve?",
+    type: "single",
+    style: "gradient",
     options: [
-      "Dietas restritivas",
-      "Exercícios físicos",
-      "Suplementos",
-      "Nunca tentei nada"
+      { text: "Uma gestação", emoji: "🤱", gradient: "gradient-pink" },
+      { text: "Duas gestações", emoji: "🤱", gradient: "gradient-purple" },
+      { text: "Três ou mais gestações", emoji: "🤱", gradient: "gradient-blue" },
+      { text: "Nunca engravidei", emoji: "❌", special: "special-pink" }
     ]
   },
   {
     id: 4,
-    question: "Qual é sua idade?",
+    question: "Se você já teve algum dos sintomas abaixo selecione:",
+    subtitle: "Continue sendo sincera...",
+    type: "multiple",
+    style: "checkbox",
     options: [
-      "18-25 anos",
-      "26-35 anos",
-      "36-45 anos",
-      "Acima de 45 anos"
+      { text: "Me sinto cansada...", emoji: "😰" },
+      { text: "Falta de ar...", emoji: "🤒" },
+      { text: "Dor nas articulações...", emoji: "🤕" },
+      { text: "Pressão elevada...", emoji: "😤" },
+      { text: "Problema com o sono...", emoji: "😴" },
+      { text: "Baixa autoestima", emoji: "😔" }
     ]
   },
   {
     id: 5,
-    question: "Quanto você gostaria de perder?",
+    question: "Qual é sua idade?",
+    type: "single",
+    style: "default",
     options: [
-      "5-10 kg",
-      "10-20 kg",
-      "20-30 kg",
-      "Mais de 30 kg"
+      { text: "18-25 anos", emoji: "🌟" },
+      { text: "26-35 anos", emoji: "✨" },
+      { text: "36-45 anos", emoji: "💫" },
+      { text: "Acima de 45 anos", emoji: "🌙" }
+    ]
+  },
+  {
+    id: 6,
+    question: "Quanto você gostaria de perder?",
+    type: "single",
+    style: "default",
+    options: [
+      { text: "5-10 kg", emoji: "🎯" },
+      { text: "10-20 kg", emoji: "💪" },
+      { text: "20-30 kg", emoji: "🔥" },
+      { text: "Mais de 30 kg", emoji: "🚀" }
+    ]
+  },
+  {
+    id: 7,
+    question: "Você está contente com seu peso atual?",
+    type: "single",
+    style: "default",
+    options: [
+      { text: "Infelizmente não", emoji: "😢" },
+      { text: "Sinto vergonha", emoji: "😳" },
+      { text: "Não tenho palavras", emoji: "😶" },
+      { text: "Sim, adoro meu corpo", emoji: "😍" }
     ]
   }
 ];
 
 // Rotas
+app.get('/teste', (req, res) => {
+  res.sendFile(path.join(__dirname, 'views', 'teste.html'));
+});
+
+app.get('/peso', (req, res) => {
+  const weightQuestion = {
+    id: 1,
+    question: "Qual seu peso atualmente?",
+    type: "slider",
+    style: "weight",
+    options: {
+      min: 40,
+      max: 150,
+      default: 70,
+      unit: "kg",
+      step: 1
+    }
+  };
+  
+  res.render('quiz', { 
+    question: weightQuestion,
+    progress: 15,
+    currentQuestion: 1,
+    totalQuestions: 7
+  });
+});
+
 app.get('/', (req, res) => {
   req.session.currentQuestion = 1;
   req.session.answers = {};
-  res.render('index', { 
+  res.render('quiz', { 
     question: quizData[0],
-    progress: 20,
+    progress: 5,
     currentQuestion: 1,
     totalQuestions: quizData.length
   });
@@ -92,7 +157,10 @@ app.post('/quiz', (req, res) => {
   const { answer, questionId } = req.body;
   const currentQ = parseInt(questionId);
   
-  // Salva a resposta
+  // Debug log
+  console.log('Pergunta:', currentQ, 'Resposta:', answer, 'Tipo:', typeof answer);
+  
+  // Salva a resposta (pode ser um array para múltipla escolha)
   req.session.answers[currentQ] = answer;
   
   // Próxima pergunta
@@ -117,8 +185,20 @@ app.get('/resultado', (req, res) => {
     return res.redirect('/');
   }
   
+  // Preparar dados seguros para o frontend
+  const answersData = {
+    peso: req.session.answers[1] || '70',
+    tempoLuta: req.session.answers[2] || 'Entre 1 e 2 anos',
+    gestacoes: req.session.answers[3] || 'Duas gestações',
+    sintomas: req.session.answers[4] || ['Falta de ar...'],
+    idade: req.session.answers[5] || '36-45 anos',
+    pesoObjetivo: req.session.answers[6] || '10-20 kg',
+    satisfacao: req.session.answers[7] || 'Sinto vergonha'
+  };
+  
   res.render('resultado', {
-    answers: req.session.answers
+    answers: req.session.answers,
+    answersData: answersData
   });
 });
 

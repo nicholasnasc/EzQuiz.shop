@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teste Slider</title>
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body style="padding: 2rem; background: #f8fafc;">
+    <h1>Teste do Slider de Peso</h1>
+    
+    <div class="weight-slider-container">
+        <!-- Unit Toggle -->
+        <div class="unit-toggle">
+            <button type="button" class="unit-btn active" data-unit="kg">kg</button>
+            <button type="button" class="unit-btn" data-unit="lb">lb</button>
+        </div>
+        
+        <!-- Weight Display -->
+        <div class="weight-display">
+            <span id="weight-value">70</span><span class="unit" id="weight-unit">kg</span>
+        </div>
+        
+        <!-- Slider -->
+        <div class="slider-wrapper">
+            <div class="slider-track">
+                <div class="slider-progress" id="slider-progress"></div>
+            </div>
+            <input 
+                type="range" 
+                class="weight-slider" 
+                id="weight-slider"
+                name="answer"
+                min="40" 
+                max="150" 
+                value="70"
+                step="1"
+            />
+        </div>
+        
+        <!-- Markers -->
+        <div class="slider-markers">
+            <span>40</span>
+            <span>95</span>
+            <span>150</span>
+        </div>
+        
+        <!-- Hint -->
+        <div class="slider-hint">
+            Arraste para ajustar
+        </div>
+    </div>
+
+    <script src="/js/script.js"></script>
+</body>
+</html>

@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Analisando Seus Resultados</title>
+    <link rel="stylesheet" href="/css/styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        /* Loader Styles */
+        .loader-container {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+        }
+        
+        .results-container {
+            display: none;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+            padding: 2rem 1rem;
+        }
+        
+        .progress-circle {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            background: conic-gradient(#ec4899 0deg, #e5e7eb 0deg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            margin-bottom: 2rem;
+        }
+        
+        .progress-circle::before {
+            content: '';
+            position: absolute;
+            width: 90px;
+            height: 90px;
+            border-radius: 50%;
+            background: white;
+        }
+        
+        .progress-text {
+            position: relative;
+            z-index: 1;
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #1f2937;
+        }
+        
+        .analyzing-text {
+            font-size: 1.25rem;
+            color: #4b5563;
+            margin-bottom: 1rem;
+            text-align: center;
+        }
+        
+        /* Results Cards */
+        .metric-card {
+            background: white;
+            border-radius: 1rem;
+            padding: 1.5rem;
+            text-align: center;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            border: 2px solid transparent;
+            transition: all 0.3s ease;
+        }
+        
+        .metric-card.green {
+            border-color: #10b981;
+        }
+        
+        .metric-card.orange {
+            border-color: #f59e0b;
+        }
+        
+        .metric-card.red {
+            border-color: #ef4444;
+        }
+        
+        .metric-circle {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            margin: 0 auto 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            transition: all 0.8s ease;
+        }
+        
+        .metric-circle.green {
+            background: conic-gradient(#10b981 347deg, #e5e7eb 347deg);
+        }
+        
+        .metric-circle.orange {
+            background: conic-gradient(#f59e0b 144deg, #e5e7eb 144deg);
+        }
+        
+        .metric-circle.red {
+            background: conic-gradient(#ef4444 97deg, #e5e7eb 97deg);
+        }
+        
+        .metric-circle::before {
+            content: '';
+            position: absolute;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: white;
+        }
+        
+        .metric-percentage {
+            position: relative;
+            z-index: 1;
+            font-size: 1.25rem;
+            font-weight: bold;
+            color: #1f2937;
+        }
+        
+        .metric-title {
+            font-size: 1rem;
+            font-weight: 600;
+            color: #1f2937;
+            margin-bottom: 0.5rem;
+        }
+        
+        .metric-subtitle {
+            font-size: 0.875rem;
+            color: #6b7280;
+        }
+        
+        .plan-card {
+            background: linear-gradient(135deg, #dcfce7 0%, #bbf7d0 100%);
+            border-radius: 1rem;
+            padding: 2rem;
+            text-align: center;
+            margin-top: 2rem;
+            border: 2px solid #10b981;
+        }
+        
+        .plan-title {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #059669;
+            margin-bottom: 1rem;
+        }
+        
+        .plan-description {
+            color: #047857;
+            margin-bottom: 1rem;
+            line-height: 1.6;
+        }
+        
+        .plan-subtitle {
+            color: #065f46;
+            font-weight: 500;
+            margin-bottom: 1.5rem;
+        }
+    </style>
+</head>
+<body>
+    <!-- Loader Container -->
+    <div class="loader-container" id="loader">
+        <div class="w-24 h-24 mx-auto bg-gradient-to-br from-pink-400 to-purple-500 rounded-full flex items-center justify-center text-white text-2xl font-bold mb-6">
+            💪
+        </div>
+        
+        <div class="progress-circle" id="progressCircle">
+            <div class="progress-text" id="progressText">0%</div>
+        </div>
+        
+        <div class="analyzing-text">
+            <div id="loadingText">Analisando suas respostas...</div>
+        </div>
+    </div>
+
+    <!-- Results Container -->
+    <div class="results-container" id="results" 
+         data-peso="<%= answersData.peso %>" 
+         data-tempo="<%= answersData.tempoLuta %>" 
+         data-idade="<%= answersData.idade %>" 
+         data-objetivo="<%= answersData.pesoObjetivo %>" 
+         data-satisfacao="<%= answersData.satisfacao %>">
+        <div class="max-w-4xl mx-auto">
+            <!-- Header -->
+            <div class="text-center mb-8">
+                <div class="w-24 h-24 mx-auto bg-gradient-to-br from-pink-400 to-purple-500 rounded-full flex items-center justify-center text-white text-2xl font-bold mb-6">
+                    💪
+                </div>
+                
+                <!-- Progress Bar -->
+                <div class="w-full max-w-md mx-auto mb-6">
+                    <div class="h-2 bg-gray-200 rounded-full overflow-hidden">
+                        <div class="h-full bg-gradient-to-r from-pink-500 to-purple-600 rounded-full" style="width: 100%;"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Metrics Cards -->
+            <div class="grid md:grid-cols-3 gap-6 mb-8">
+                <!-- Mentalidade e Motivação -->
+                <div class="metric-card green">
+                    <div class="metric-circle green">
+                        <div class="metric-percentage" id="motivationPercent">97%</div>
+                    </div>
+                    <div class="metric-title">Mentalidade e<br>Motivação</div>
+                    <div class="metric-subtitle" id="motivationSubtitle">Perfeita para o<br>Projeto</div>
+                </div>
+
+                <!-- Conhecimento -->
+                <div class="metric-card orange">
+                    <div class="metric-circle orange">
+                        <div class="metric-percentage" id="knowledgePercent">40%</div>
+                    </div>
+                    <div class="metric-title">Conhecimento</div>
+                    <div class="metric-subtitle" id="knowledgeSubtitle">Atualmente</div>
+                </div>
+
+                <!-- Peso -->
+                <div class="metric-card red">
+                    <div class="metric-circle red">
+                        <div class="metric-percentage" id="weightPercent">27%</div>
+                    </div>
+                    <div class="metric-title">Situação<br>do Peso</div>
+                    <div class="metric-subtitle" id="weightSubtitle">Acima do Ideal</div>
+                </div>
+            </div>
+
+            <!-- Plan Card -->
+            <div class="plan-card">
+                <div class="plan-title">Vamos montar um plano?</div>
+                <div class="plan-description">
+                    Um plano exclusivo e feito pra você de acordo com suas necessidades e objetivos, seja sincera nas próximas 3 perguntas.
+                </div>
+                <div class="plan-subtitle">
+                    Através delas, montaremos o plano com a quantidade correta de Adesivos para seu EMAGRECIMENTO.
+                </div>
+                
+                <button onclick="goToProduct()" class="btn-gradient-pink w-full max-w-sm mx-auto rounded-2xl text-lg font-bold py-4">
+                    Continuar
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Ler dados dos atributos HTML
+        const resultsContainer = document.getElementById('results');
+        const answers = {
+            peso: resultsContainer.dataset.peso,
+            tempoLuta: resultsContainer.dataset.tempo,
+            idade: resultsContainer.dataset.idade,
+            pesoObjetivo: resultsContainer.dataset.objetivo,
+            satisfacao: resultsContainer.dataset.satisfacao
+        };
+        
+        // Função para calcular porcentagens baseadas nas respostas
+        function calculateMetrics() {
+            // Motivação baseada no tempo de luta e satisfação com peso
+            let motivationScore = 70; // Base
+            
+            // Baseado na pergunta "Há quanto tempo luta contra barriga"
+            if (answers.tempoLuta && answers.tempoLuta.includes('Menos de 6 meses')) motivationScore += 20;
+            else if (answers.tempoLuta && answers.tempoLuta.includes('Entre 6 meses e 1 ano')) motivationScore += 10;
+            else if (answers.tempoLuta && answers.tempoLuta.includes('Mais de 2 anos')) motivationScore += 30;
+            
+            // Baseado na satisfação com peso atual
+            if (answers.satisfacao && answers.satisfacao.includes('Infelizmente não')) motivationScore += 10;
+            else if (answers.satisfacao && answers.satisfacao.includes('Sinto vergonha')) motivationScore += 15;
+            
+            motivationScore = Math.min(motivationScore, 97);
+            
+            // Conhecimento baseado na idade e experiência
+            let knowledgeScore = 30; // Base
+            if (answers.idade && answers.idade.includes('26-35 anos')) knowledgeScore += 15;
+            else if (answers.idade && answers.idade.includes('36-45 anos')) knowledgeScore += 20;
+            else if (answers.idade && answers.idade.includes('Acima de 45 anos')) knowledgeScore += 10;
+            
+            // Peso baseado no peso atual e objetivo
+            let weightScore = 50; // Base
+            if (answers.peso) { // Peso atual
+                const peso = parseInt(answers.peso);
+                if (peso > 80) weightScore -= 20;
+                else if (peso > 70) weightScore -= 10;
+                else weightScore += 10;
+            }
+            
+            if (answers.pesoObjetivo && answers.pesoObjetivo.includes('Mais de 30 kg')) weightScore -= 30;
+            else if (answers.pesoObjetivo && answers.pesoObjetivo.includes('20-30 kg')) weightScore -= 20;
+            else if (answers.pesoObjetivo && answers.pesoObjetivo.includes('10-20 kg')) weightScore -= 10;
+            
+            weightScore = Math.max(weightScore, 15);
+            
+            return {
+                motivation: motivationScore,
+                knowledge: knowledgeScore,
+                weight: weightScore
+            };
+        }
+        
+        // Atualizar círculos com as porcentagens calculadas
+        function updateMetrics() {
+            const metrics = calculateMetrics();
+            
+            // Atualizar motivação
+            document.getElementById('motivationPercent').textContent = metrics.motivation + '%';
+            const motivationCircle = document.querySelector('.metric-card.green .metric-circle');
+            const motivationDegrees = (metrics.motivation / 100) * 360;
+            motivationCircle.style.background = `conic-gradient(#10b981 ${motivationDegrees}deg, #e5e7eb ${motivationDegrees}deg)`;
+            
+            if (metrics.motivation >= 80) {
+                document.getElementById('motivationSubtitle').innerHTML = 'Perfeita para o<br>Projeto';
+            } else if (metrics.motivation >= 60) {
+                document.getElementById('motivationSubtitle').innerHTML = 'Boa para o<br>Projeto';
+            } else {
+                document.getElementById('motivationSubtitle').innerHTML = 'Precisa de<br>Motivação';
+            }
+            
+            // Atualizar conhecimento
+            document.getElementById('knowledgePercent').textContent = metrics.knowledge + '%';
+            const knowledgeCircle = document.querySelector('.metric-card.orange .metric-circle');
+            const knowledgeDegrees = (metrics.knowledge / 100) * 360;
+            knowledgeCircle.style.background = `conic-gradient(#f59e0b ${knowledgeDegrees}deg, #e5e7eb ${knowledgeDegrees}deg)`;
+            
+            // Atualizar peso
+            document.getElementById('weightPercent').textContent = (100 - metrics.weight) + '%';
+            const weightCircle = document.querySelector('.metric-card.red .metric-circle');
+            const weightDegrees = ((100 - metrics.weight) / 100) * 360;
+            weightCircle.style.background = `conic-gradient(#ef4444 ${weightDegrees}deg, #e5e7eb ${weightDegrees}deg)`;
+            
+            if (metrics.weight < 30) {
+                document.getElementById('weightSubtitle').textContent = 'Muito Acima do Ideal';
+            } else if (metrics.weight < 50) {
+                document.getElementById('weightSubtitle').textContent = 'Acima do Ideal';
+            } else {
+                document.getElementById('weightSubtitle').textContent = 'Próximo do Ideal';
+            }
+        }
+        
+        // Loader functionality
+        let progress = 0;
+        const progressCircle = document.getElementById('progressCircle');
+        const progressText = document.getElementById('progressText');
+        const loadingText = document.getElementById('loadingText');
+        
+        const messages = [
+            "Analisando suas respostas...",
+            "Calculando seu perfil...",
+            "Preparando sua análise...",
+            "Gerando relatório personalizado...",
+            "Finalizando análise..."
+        ];
+        
+        let messageIndex = 0;
+        
+        function updateProgress() {
+            progress += Math.random() * 15 + 5;
+            if (progress > 100) progress = 100;
+            
+            // Update circle
+            const degrees = (progress / 100) * 360;
+            progressCircle.style.background = `conic-gradient(#ec4899 ${degrees}deg, #e5e7eb ${degrees}deg)`;
+            progressText.textContent = Math.round(progress) + '%';
+            
+            // Update message
+            if (progress > messageIndex * 20 + 20 && messageIndex < messages.length - 1) {
+                messageIndex++;
+                loadingText.textContent = messages[messageIndex];
+            }
+            
+            if (progress < 100) {
+                setTimeout(updateProgress, 200 + Math.random() * 300);
+            } else {
+                setTimeout(showResults, 1000);
+            }
+        }
+        
+        function showResults() {
+            document.getElementById('loader').style.display = 'none';
+            document.getElementById('results').style.display = 'block';
+            
+            // Atualizar métricas após mostrar resultados
+            setTimeout(updateMetrics, 500);
+        }
+        
+        function goToProduct() {
+            window.location.href = '/produto';
+        }
+        
+        // Start loading when page loads
+        setTimeout(() => {
+            updateProgress();
+        }, 500);
+    </script>
+</body>
+</html>
+                                                <span class="text-red-500">•</span> <%= symptom %>
+                                            </p>
+                                        <% }); %>
+                                    <% } else { %>
+                                        <p><%= answers[3] %></p>
+                                    <% } %>
+                                </div>
+                            </div>
+                            
+                            <div class="bg-white rounded-lg p-3 border">
+                                <span class="font-medium text-blue-700">🎂 Faixa etária:</span>
+                                <p class="mt-1 text-gray-700"><%= answers[4] %></p>
+                            </div>
+                            
+                            <div class="bg-white rounded-lg p-3 border">
+                                <span class="font-medium text-blue-700">🎯 Meta de peso:</span>
+                                <p class="mt-1 text-gray-700"><%= answers[5] %></p>
+                            </div>
+                            
+                            <div class="bg-white rounded-lg p-3 border">
+                                <span class="font-medium text-blue-700">💭 Satisfação atual:</span>
+                                <p class="mt-1 text-gray-700"><%= answers[6] %></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Análise Personalizada -->
+                <div class="relative min-w-0 self-auto mb-6" style="padding: 0.2rem; flex-basis: 100%;">
+                    <div class="bg-gradient-to-br from-purple-50 to-purple-100 rounded-2xl p-6 border border-purple-200">
+                        <h3 class="text-xl font-bold text-center mb-4 text-gray-800">🔬 Nossa Análise:</h3>
+                        
+                        <div class="space-y-4 text-sm">
+                            <!-- Análise baseada no tempo de luta -->
+                            <% if (answers[1] && answers[1].includes('Mais de 2 anos')) { %>
+                                <div class="bg-red-50 border border-red-200 rounded-lg p-3">
+                                    <p class="font-medium text-red-700">⚠️ Situação Crítica:</p>
+                                    <p class="text-red-600">Você luta há muito tempo, isso pode indicar resistência metabólica.</p>
+                                </div>
+                            <% } else if (answers[1] && answers[1].includes('Entre 1 e 2 anos')) { %>
+                                <div class="bg-yellow-50 border border-yellow-200 rounded-lg p-3">
+                                    <p class="font-medium text-yellow-700">⚡ Situação Moderada:</p>
+                                    <p class="text-yellow-600">Há algum tempo tentando, pode precisar de uma abordagem mais específica.</p>
+                                </div>
+                            <% } else { %>
+                                <div class="bg-green-50 border border-green-200 rounded-lg p-3">
+                                    <p class="font-medium text-green-700">✅ Situação Favorável:</p>
+                                    <p class="text-green-600">Começando agora ou há pouco tempo, grandes chances de sucesso!</p>
+                                </div>
+                            <% } %>
+                            
+                            <!-- Análise dos sintomas -->
+                            <% if (Array.isArray(answers[3]) && answers[3].length > 3) { %>
+                                <div class="bg-orange-50 border border-orange-200 rounded-lg p-3">
+                                    <p class="font-medium text-orange-700">🚨 Múltiplos Sintomas:</p>
+                                    <p class="text-orange-600">Você relatou <%= answers[3].length %> sintomas. Isso indica necessidade de cuidado especial.</p>
+                                </div>
+                            <% } %>
+                            
+                            <!-- Análise da idade -->
+                            <% if (answers[4] && answers[4].includes('Acima de 45 anos')) { %>
+                                <div class="bg-blue-50 border border-blue-200 rounded-lg p-3">
+                                    <p class="font-medium text-blue-700">🧘‍♀️ Metabolismo Maduro:</p>
+                                    <p class="text-blue-600">Na sua faixa etária, o metabolismo precisa de estratégias específicas.</p>
+                                </div>
+                            <% } %>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Recomendações -->
+                <div class="relative min-w-0 self-auto mb-6" style="padding: 0.2rem; flex-basis: 100%;">
+                    <div class="bg-gradient-to-br from-green-50 to-green-100 rounded-2xl p-6 border border-green-200">
+                        <h3 class="text-xl font-bold text-center mb-4 text-gray-800">💡 Nossas Recomendações:</h3>
+                        
+                        <div class="space-y-3 text-sm">
+                            <div class="flex items-start gap-3">
+                                <span class="text-green-500 text-lg">✓</span>
+                                <div>
+                                    <p class="font-medium">Foco no sistema digestivo</p>
+                                    <p class="text-gray-600">Baseado no seu perfil, o intestino pode ser a chave.</p>
+                                </div>
+                            </div>
+                            
+                            <div class="flex items-start gap-3">
+                                <span class="text-green-500 text-lg">✓</span>
+                                <div>
+                                    <p class="font-medium">Redução da inflamação</p>
+                                    <p class="text-gray-600">Seus sintomas indicam processo inflamatório.</p>
+                                </div>
+                            </div>
+                            
+                            <div class="flex items-start gap-3">
+                                <span class="text-green-500 text-lg">✓</span>
+                                <div>
+                                    <p class="font-medium">Aceleração metabólica natural</p>
+                                    <p class="text-gray-600">Sua idade e histórico sugerem essa abordagem.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Botão Finalizar -->
+                <div class="relative min-w-0 self-auto" style="padding: 0.2rem; flex-basis: 100%;">
+                    <div class="mx-auto relative max-w-[28rem]">
+                        <button type="button" class="btn-gradient-pink w-full relative active:scale-[.99] rounded-2xl" onclick="window.location.href='/produto'">
+                            🎯 Ver Solução Personalizada
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Nota de privacidade -->
+                <div class="relative min-w-0 self-auto mt-4" style="padding: 0.2rem; flex-basis: 100%;">
+                    <div class="text-center text-xs text-gray-500 bg-gray-50 rounded-lg p-3">
+                        <p>🔒 Suas informações são confidenciais e usadas apenas para personalizar sua experiência.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+    </main>
+
+    <script src="/js/script.js"></script>
+</body>
+</html>

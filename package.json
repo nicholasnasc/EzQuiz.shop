@@ -1,14 +1,14 @@
 {
-  "name": "quiz-site",
+  "name": "ezquiz",
   "version": "1.0.0",
-  "description": "Site de quiz para vendas com Express e EJS",
+  "description": "EzQuiz is a simple quiz application for buy products and services.",
   "main": "app.js",
   "scripts": {
     "start": "node app.js",
     "dev": "nodemon app.js"
   },
   "keywords": ["quiz", "express", "ejs", "sales"],
-  "author": "",
+  "author": "nicholasnasc",
   "license": "ISC",
   "dependencies": {
     "express": "^4.18.2",
