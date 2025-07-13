@@ -2,6 +2,8 @@ const express = require('express');
 const session = require('express-session');
 const cookieParser = require('cookie-parser');
 const path = require('path');
+const fs = require('fs');
+require('dotenv').config();
 
 const app = express();
 const PORT = process.env.PORT || 8080;
@@ -16,144 +18,70 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(cookieParser());
 app.use(session({
-  secret: 'quiz-secret-key',
+  secret: process.env.ADMIN_SESSION_SECRET || 'quiz-secret-key',
   resave: false,
   saveUninitialized: true,
   cookie: { secure: false }
 }));
 
-// Dados das perguntas do quiz
-const quizData = [
-  {
-    id: 1,
-    question: "Qual seu peso atualmente?",
-    type: "slider",
-    style: "weight",
-    options: {
-      min: 40,
-      max: 150,
-      default: 70,
-      unit: "kg",
-      step: 1
-    }
-  },
-  {
-    id: 2,
-    question: "Há quanto tempo você luta contra a barriga estufada?",
-    type: "single",
-    style: "gradient",
-    options: [
-      { text: "Menos de 6 meses", emoji: "😐", gradient: "gradient-blue" },
-      { text: "Entre 6 meses e 1 ano", emoji: "😕", gradient: "gradient-green" },
-      { text: "Entre 1 e 2 anos", emoji: "😟", gradient: "gradient-purple" },
-      { text: "Mais de 2 anos", emoji: "😢", gradient: "gradient-pink" }
-    ]
-  },
-  {
-    id: 3,
-    question: "Quantas gestações você já teve?",
-    type: "single",
-    style: "gradient",
-    options: [
-      { text: "Uma gestação", emoji: "🤱", gradient: "gradient-pink" },
-      { text: "Duas gestações", emoji: "🤱", gradient: "gradient-purple" },
-      { text: "Três ou mais gestações", emoji: "🤱", gradient: "gradient-blue" },
-      { text: "Nunca engravidei", emoji: "❌", special: "special-pink" }
-    ]
-  },
-  {
-    id: 4,
-    question: "Se você já teve algum dos sintomas abaixo selecione:",
-    subtitle: "Continue sendo sincera...",
-    type: "multiple",
-    style: "checkbox",
-    options: [
-      { text: "Me sinto cansada...", emoji: "😰" },
-      { text: "Falta de ar...", emoji: "🤒" },
-      { text: "Dor nas articulações...", emoji: "🤕" },
-      { text: "Pressão elevada...", emoji: "😤" },
-      { text: "Problema com o sono...", emoji: "😴" },
-      { text: "Baixa autoestima", emoji: "😔" }
-    ]
-  },
-  {
-    id: 5,
-    question: "Qual é sua idade?",
-    type: "single",
-    style: "default",
-    options: [
-      { text: "18-25 anos", emoji: "🌟" },
-      { text: "26-35 anos", emoji: "✨" },
-      { text: "36-45 anos", emoji: "💫" },
-      { text: "Acima de 45 anos", emoji: "🌙" }
-    ]
-  },
-  {
-    id: 6,
-    question: "Quanto você gostaria de perder?",
-    type: "single",
-    style: "default",
-    options: [
-      { text: "5-10 kg", emoji: "🎯" },
-      { text: "10-20 kg", emoji: "💪" },
-      { text: "20-30 kg", emoji: "🔥" },
-      { text: "Mais de 30 kg", emoji: "🚀" }
-    ]
-  },
-  {
-    id: 7,
-    question: "Você está contente com seu peso atual?",
-    type: "single",
-    style: "default",
-    options: [
-      { text: "Infelizmente não", emoji: "😢" },
-      { text: "Sinto vergonha", emoji: "😳" },
-      { text: "Não tenho palavras", emoji: "😶" },
-      { text: "Sim, adoro meu corpo", emoji: "😍" }
-    ]
+// Carregar dados do quiz do arquivo JSON
+function loadQuizData() {
+  try {
+    const data = fs.readFileSync(path.join(__dirname, 'data', 'quiz-config.json'), 'utf8');
+    return JSON.parse(data);
+  } catch (error) {
+    console.error('Erro ao carregar dados do quiz:', error);
+    return null;
   }
-];
+}
 
-// Rotas
+// Salvar dados do quiz no arquivo JSON
+function saveQuizData(data) {
+  try {
+    fs.writeFileSync(path.join(__dirname, 'data', 'quiz-config.json'), JSON.stringify(data, null, 2));
+    return true;
+  } catch (error) {
+    console.error('Erro ao salvar dados do quiz:', error);
+    return false;
+  }
+}
+
+// Middleware de autenticação do admin
+function requireAuth(req, res, next) {
+  if (req.session.adminAuthenticated) {
+    next();
+  } else {
+    res.redirect('/admin/login');
+  }
+}
+
+// Rotas principais
 app.get('/teste', (req, res) => {
   res.sendFile(path.join(__dirname, 'views', 'teste.html'));
 });
 
-app.get('/peso', (req, res) => {
-  const weightQuestion = {
-    id: 1,
-    question: "Qual seu peso atualmente?",
-    type: "slider",
-    style: "weight",
-    options: {
-      min: 40,
-      max: 150,
-      default: 70,
-      unit: "kg",
-      step: 1
-    }
-  };
-  
-  res.render('quiz', { 
-    question: weightQuestion,
-    progress: 15,
-    currentQuestion: 1,
-    totalQuestions: 7
-  });
-});
-
 app.get('/', (req, res) => {
+  const quizConfig = loadQuizData();
+  if (!quizConfig) {
+    return res.status(500).send('Erro ao carregar dados do quiz');
+  }
+  
   req.session.currentQuestion = 1;
   req.session.answers = {};
   res.render('quiz', { 
-    question: quizData[0],
+    question: quizConfig.quiz.questions[0],
     progress: 5,
     currentQuestion: 1,
-    totalQuestions: quizData.length
+    totalQuestions: quizConfig.quiz.questions.length
   });
 });
 
 app.post('/quiz', (req, res) => {
+  const quizConfig = loadQuizData();
+  if (!quizConfig) {
+    return res.status(500).send('Erro ao carregar dados do quiz');
+  }
+  
   const { answer, questionId } = req.body;
   const currentQ = parseInt(questionId);
   
@@ -166,13 +94,13 @@ app.post('/quiz', (req, res) => {
   // Próxima pergunta
   const nextQ = currentQ + 1;
   
-  if (nextQ <= quizData.length) {
+  if (nextQ <= quizConfig.quiz.questions.length) {
     req.session.currentQuestion = nextQ;
     res.render('quiz', {
-      question: quizData[nextQ - 1],
-      progress: (nextQ / quizData.length) * 100,
+      question: quizConfig.quiz.questions[nextQ - 1],
+      progress: (nextQ / quizConfig.quiz.questions.length) * 100,
       currentQuestion: nextQ,
-      totalQuestions: quizData.length
+      totalQuestions: quizConfig.quiz.questions.length
     });
   } else {
     // Quiz finalizado, redireciona para resultado
@@ -181,7 +109,12 @@ app.post('/quiz', (req, res) => {
 });
 
 app.get('/resultado', (req, res) => {
-  if (!req.session.answers || Object.keys(req.session.answers).length < quizData.length) {
+  const quizConfig = loadQuizData();
+  if (!quizConfig) {
+    return res.status(500).send('Erro ao carregar dados do quiz');
+  }
+  
+  if (!req.session.answers || Object.keys(req.session.answers).length < quizConfig.quiz.questions.length) {
     return res.redirect('/');
   }
   
@@ -200,6 +133,62 @@ app.get('/resultado', (req, res) => {
     answers: req.session.answers,
     answersData: answersData
   });
+});
+
+// Rotas do Admin
+app.get('/admin/login', (req, res) => {
+  res.render('admin/login', { error: null });
+});
+
+app.post('/admin/login', (req, res) => {
+  const { username, password } = req.body;
+  
+  if (username === process.env.ADMIN_USERNAME && password === process.env.ADMIN_PASSWORD) {
+    req.session.adminAuthenticated = true;
+    res.redirect('/admin/dashboard');
+  } else {
+    res.render('admin/login', { error: 'Credenciais inválidas' });
+  }
+});
+
+app.get('/admin/logout', (req, res) => {
+  req.session.adminAuthenticated = false;
+  res.redirect('/admin/login');
+});
+
+app.get('/admin/dashboard', requireAuth, (req, res) => {
+  const quizConfig = loadQuizData();
+  if (!quizConfig) {
+    return res.status(500).send('Erro ao carregar dados do quiz');
+  }
+  
+  res.render('admin/dashboard', { 
+    quiz: quizConfig.quiz,
+    success: req.query.success,
+    error: req.query.error
+  });
+});
+
+app.post('/admin/save-quiz', requireAuth, (req, res) => {
+  try {
+    const { title, description, questions } = req.body;
+    
+    const quizData = {
+      quiz: {
+        title,
+        description,
+        questions: JSON.parse(questions)
+      }
+    };
+    
+    if (saveQuizData(quizData)) {
+      res.redirect('/admin/dashboard?success=Quiz+salvo+com+sucesso');
+    } else {
+      res.redirect('/admin/dashboard?error=Erro+ao+salvar+quiz');
+    }
+  } catch (error) {
+    res.redirect('/admin/dashboard?error=Erro+ao+processar+dados');
+  }
 });
 
 app.get('/produto', (req, res) => {

@@ -1,0 +1,189 @@
+{
+  "quiz": {
+    "title": "Descubra Sua Solução para Barriga Estufada",
+    "description": "Quiz personalizado para identificar seu perfil e criar um plano específico",
+    "questions": [
+      {
+        "id": 1,
+        "question": "Qual seu peso atualmente?",
+        "type": "slider",
+        "style": "weight",
+        "required": true,
+        "options": {
+          "min": 40,
+          "max": 150,
+          "default": 70,
+          "unit": "kg",
+          "step": 1
+        }
+      },
+      {
+        "id": 2,
+        "question": "Há quanto tempo você luta contra a barriga estufada?",
+        "type": "single",
+        "style": "gradient",
+        "required": true,
+        "options": [
+          {
+            "text": "Menos de 6 meses",
+            "emoji": "😐",
+            "gradient": "gradient-blue"
+          },
+          {
+            "text": "Entre 6 meses e 1 ano",
+            "emoji": "😕",
+            "gradient": "gradient-green"
+          },
+          {
+            "text": "Entre 1 e 2 anos",
+            "emoji": "😟",
+            "gradient": "gradient-purple"
+          },
+          {
+            "text": "Mais de 2 anos",
+            "emoji": "😢",
+            "gradient": "gradient-pink"
+          }
+        ]
+      },
+      {
+        "id": 3,
+        "question": "Quantas gestações você já teve?",
+        "type": "single",
+        "style": "gradient",
+        "required": true,
+        "options": [
+          {
+            "text": "Uma gestação",
+            "emoji": "🤱",
+            "gradient": "gradient-pink"
+          },
+          {
+            "text": "Duas gestações",
+            "emoji": "🤱",
+            "gradient": "gradient-purple"
+          },
+          {
+            "text": "Três ou mais gestações",
+            "emoji": "🤱",
+            "gradient": "gradient-blue"
+          },
+          {
+            "text": "Nunca engravidei",
+            "emoji": "❌",
+            "special": "special-pink"
+          }
+        ]
+      },
+      {
+        "id": 4,
+        "question": "Se você já teve algum dos sintomas abaixo selecione:",
+        "subtitle": "Continue sendo sincera...",
+        "type": "multiple",
+        "style": "checkbox",
+        "required": true,
+        "options": [
+          {
+            "text": "Me sinto cansada...",
+            "emoji": "😰"
+          },
+          {
+            "text": "Falta de ar...",
+            "emoji": "🤒"
+          },
+          {
+            "text": "Dor nas articulações...",
+            "emoji": "🤕"
+          },
+          {
+            "text": "Pressão elevada...",
+            "emoji": "😤"
+          },
+          {
+            "text": "Problema com o sono...",
+            "emoji": "😴"
+          },
+          {
+            "text": "Baixa autoestima",
+            "emoji": "😔"
+          }
+        ]
+      },
+      {
+        "id": 5,
+        "question": "Qual é sua idade?",
+        "type": "single",
+        "style": "default",
+        "required": true,
+        "options": [
+          {
+            "text": "18-25 anos",
+            "emoji": "🌟"
+          },
+          {
+            "text": "26-35 anos",
+            "emoji": "✨"
+          },
+          {
+            "text": "36-45 anos",
+            "emoji": "💫"
+          },
+          {
+            "text": "Acima de 45 anos",
+            "emoji": "🌙"
+          }
+        ]
+      },
+      {
+        "id": 6,
+        "question": "Quanto você gostaria de perder?",
+        "type": "single",
+        "style": "default",
+        "required": true,
+        "options": [
+          {
+            "text": "5-10 kg",
+            "emoji": "🎯"
+          },
+          {
+            "text": "10-20 kg",
+            "emoji": "💪"
+          },
+          {
+            "text": "20-30 kg",
+            "emoji": "🔥"
+          },
+          {
+            "text": "Mais de 30 kg",
+            "emoji": "🚀"
+          }
+        ]
+      },
+      {
+        "id": 7,
+        "question": "Você está contente com seu peso atual?",
+        "type": "single",
+        "style": "default",
+        "required": true,
+        "options": [
+          {
+            "text": "Infelizmente não",
+            "emoji": "😢"
+          },
+          {
+            "text": "Sinto vergonha",
+            "emoji": "😳"
+          },
+          {
+            "text": "Não tenho palavras",
+            "emoji": "😶"
+          },
+          {
+            "text": "Sim, adoro meu corpo",
+            "emoji": "😍"
+          }
+        ]
+      }
+    ]
+  }
+}

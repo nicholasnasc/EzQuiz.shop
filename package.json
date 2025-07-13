@@ -7,14 +7,20 @@
     "start": "node app.js",
     "dev": "nodemon app.js"
   },
-  "keywords": ["quiz", "express", "ejs", "sales"],
+  "keywords": [
+    "quiz",
+    "express",
+    "ejs",
+    "sales"
+  ],
   "author": "nicholasnasc",
   "license": "ISC",
   "dependencies": {
-    "express": "^4.18.2",
+    "cookie-parser": "^1.4.6",
+    "dotenv": "^17.2.0",
     "ejs": "^3.1.9",
-    "express-session": "^1.17.3",
-    "cookie-parser": "^1.4.6"
+    "express": "^4.18.2",
+    "express-session": "^1.17.3"
   },
   "devDependencies": {
     "nodemon": "^3.0.1"
