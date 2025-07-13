@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EzQuiz.shop Docs - Documentação Completa</title>
+    <link rel="stylesheet" href="/docs/css/docs.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #667eea;
+            --primary-dark: #5a6fd8;
+            --secondary: #764ba2;
+            --success: #28a745;
+            --warning: #ffc107;
+            --danger: #dc3545;
+            --info: #17a2b8;
+            
+            --gray-50: #f9fafb;
+            --gray-100: #f3f4f6;
+            --gray-200: #e5e7eb;
+            --gray-300: #d1d5db;
+            --gray-400: #9ca3af;
+            --gray-500: #6b7280;
+            --gray-600: #4b5563;
+            --gray-700: #374151;
+            --gray-800: #1f2937;
+            --gray-900: #111827;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            line-height: 1.6;
+            color: var(--gray-800);
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+
+        .docs-landing {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+            text-align: center;
+        }
+
+        .docs-hero {
+            background: white;
+            border-radius: 24px;
+            padding: 4rem 3rem;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+            max-width: 800px;
+            margin-bottom: 3rem;
+        }
+
+        .docs-logo {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+        }
+
+        .docs-title {
+            font-size: 3rem;
+            font-weight: 700;
+            color: var(--gray-900);
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .docs-subtitle {
+            font-size: 1.25rem;
+            color: var(--gray-600);
+            margin-bottom: 2rem;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .docs-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 2rem;
+            margin: 2rem 0;
+        }
+
+        .docs-stat {
+            text-align: center;
+        }
+
+        .docs-stat-number {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--primary);
+            display: block;
+        }
+
+        .docs-stat-label {
+            font-size: 0.875rem;
+            color: var(--gray-500);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .docs-actions {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin-top: 2rem;
+        }
+
+        .docs-button {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 1rem 2rem;
+            background: var(--primary);
+            color: white;
+            text-decoration: none;
+            border-radius: 12px;
+            font-weight: 600;
+            transition: all 0.2s ease;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+
+        .docs-button:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        }
+
+        .docs-button.secondary {
+            background: white;
+            color: var(--primary);
+            border: 2px solid var(--primary);
+        }
+
+        .docs-button.secondary:hover {
+            background: var(--gray-50);
+        }
+
+        .docs-nav-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+            max-width: 1200px;
+            width: 100%;
+        }
+
+        .docs-nav-card {
+            background: white;
+            border-radius: 16px;
+            padding: 2rem;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+            transition: all 0.2s ease;
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .docs-nav-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+        }
+
+        .docs-nav-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            display: block;
+        }
+
+        .docs-nav-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--gray-900);
+            margin-bottom: 0.5rem;
+        }
+
+        .docs-nav-description {
+            color: var(--gray-600);
+            margin-bottom: 1rem;
+        }
+
+        .docs-nav-links {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        .docs-nav-link {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            background: var(--gray-100);
+            color: var(--gray-700);
+            text-decoration: none;
+            border-radius: 6px;
+            font-size: 0.875rem;
+            transition: all 0.2s ease;
+        }
+
+        .docs-nav-link:hover {
+            background: var(--primary);
+            color: white;
+        }
+
+        .docs-footer {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            padding: 2rem;
+            margin-top: 4rem;
+            border-radius: 16px;
+            text-align: center;
+            color: white;
+        }
+
+        .docs-footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .docs-footer-link {
+            color: rgba(255, 255, 255, 0.8);
+            text-decoration: none;
+            transition: color 0.2s ease;
+        }
+
+        .docs-footer-link:hover {
+            color: white;
+        }
+
+        @media (max-width: 768px) {
+            .docs-hero {
+                padding: 2rem 1.5rem;
+            }
+
+            .docs-title {
+                font-size: 2rem;
+            }
+
+            .docs-subtitle {
+                font-size: 1rem;
+            }
+
+            .docs-actions {
+                flex-direction: column;
+            }
+
+            .docs-nav-grid {
+                grid-template-columns: 1fr;
+                gap: 1rem;
+            }
+
+            .docs-nav-card {
+                padding: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="docs-landing">
+        <!-- Hero Section -->
+        <div class="docs-hero">
+            <div class="docs-logo">📚</div>
+            <h1 class="docs-title">EzQuiz.shop Docs</h1>
+            <p class="docs-subtitle">
+                Documentação completa do sistema de quizzes mais fácil de usar e implementar. 
+                Aprenda tudo sobre instalação, administração e personalização.
+            </p>
+
+            <div class="docs-stats">
+                <div class="docs-stat">
+                    <span class="docs-stat-number">8</span>
+                    <span class="docs-stat-label">Guias</span>
+                </div>
+                <div class="docs-stat">
+                    <span class="docs-stat-number">50+</span>
+                    <span class="docs-stat-label">Exemplos</span>
+                </div>
+                <div class="docs-stat">
+                    <span class="docs-stat-number">100%</span>
+                    <span class="docs-stat-label">Cobertura</span>
+                </div>
+            </div>
+
+            <div class="docs-actions">
+                <a href="/docs/README" class="docs-button">
+                    🚀 Começar Agora
+                </a>
+                <a href="/docs/INDEX" class="docs-button secondary">
+                    📖 Ver Índice
+                </a>
+                <a href="/" class="docs-button secondary">
+                    ← Voltar ao Quiz
+                </a>
+            </div>
+        </div>
+
+        <!-- Navigation Grid -->
+        <div class="docs-nav-grid">
+            <!-- Getting Started -->
+            <a href="/docs/guides/installation" class="docs-nav-card">
+                <span class="docs-nav-icon">🚀</span>
+                <h3 class="docs-nav-title">Primeiros Passos</h3>
+                <p class="docs-nav-description">
+                    Instale e configure o EzQuiz.shop em minutos. Guia completo do zero à produção.
+                </p>
+                <div class="docs-nav-links">
+                    <span class="docs-nav-link">Instalação</span>
+                    <span class="docs-nav-link">Configuração</span>
+                    <span class="docs-nav-link">Deploy</span>
+                </div>
+            </a>
+
+            <!-- Administration -->
+            <a href="/docs/guides/admin-access" class="docs-nav-card">
+                <span class="docs-nav-icon">⚙️</span>
+                <h3 class="docs-nav-title">Administração</h3>
+                <p class="docs-nav-description">
+                    Gerencie quizzes, usuários e configurações através do painel administrativo.
+                </p>
+                <div class="docs-nav-links">
+                    <span class="docs-nav-link">Painel Admin</span>
+                    <span class="docs-nav-link">Gerenciar Quizzes</span>
+                    <span class="docs-nav-link">Relatórios</span>
+                </div>
+            </a>
+
+            <!-- Development -->
+            <a href="/docs/guides/dev-advanced" class="docs-nav-card">
+                <span class="docs-nav-icon">💻</span>
+                <h3 class="docs-nav-title">Desenvolvimento</h3>
+                <p class="docs-nav-description">
+                    Personalize, estenda e integre o sistema com suas próprias funcionalidades.
+                </p>
+                <div class="docs-nav-links">
+                    <span class="docs-nav-link">Customização</span>
+                    <span class="docs-nav-link">APIs</span>
+                    <span class="docs-nav-link">Plugins</span>
+                </div>
+            </a>
+
+            <!-- API Reference -->
+            <a href="/docs/api/endpoints" class="docs-nav-card">
+                <span class="docs-nav-icon">🔗</span>
+                <h3 class="docs-nav-title">API Reference</h3>
+                <p class="docs-nav-description">
+                    Documentação completa de todos os endpoints, parâmetros e exemplos de uso.
+                </p>
+                <div class="docs-nav-links">
+                    <span class="docs-nav-link">Endpoints</span>
+                    <span class="docs-nav-link">Authentication</span>
+                    <span class="docs-nav-link">Webhooks</span>
+                </div>
+            </a>
+
+            <!-- Deployment -->
+            <a href="/docs/guides/deployment" class="docs-nav-card">
+                <span class="docs-nav-icon">🌐</span>
+                <h3 class="docs-nav-title">Deploy & Produção</h3>
+                <p class="docs-nav-description">
+                    Coloque seu quiz em produção com segurança e performance otimizada.
+                </p>
+                <div class="docs-nav-links">
+                    <span class="docs-nav-link">Heroku</span>
+                    <span class="docs-nav-link">Vercel</span>
+                    <span class="docs-nav-link">Docker</span>
+                </div>
+            </a>
+
+            <!-- Troubleshooting -->
+            <a href="/docs/guides/troubleshooting" class="docs-nav-card">
+                <span class="docs-nav-icon">🔧</span>
+                <h3 class="docs-nav-title">Solução de Problemas</h3>
+                <p class="docs-nav-description">
+                    Encontre soluções rápidas para os problemas mais comuns e dicas de debug.
+                </p>
+                <div class="docs-nav-links">
+                    <span class="docs-nav-link">FAQ</span>
+                    <span class="docs-nav-link">Erros Comuns</span>
+                    <span class="docs-nav-link">Debug</span>
+                </div>
+            </a>
+        </div>
+
+        <!-- Footer -->
+        <div class="docs-footer">
+            <div class="docs-footer-links">
+                <a href="/docs/README" class="docs-footer-link">Visão Geral</a>
+                <a href="/docs/CONTRIBUTING" class="docs-footer-link">Contribuir</a>
+                <a href="/docs/CHANGELOG" class="docs-footer-link">Changelog</a>
+                <a href="/" class="docs-footer-link">EzQuiz.shop</a>
+            </div>
+            <p>&copy; 2024 EzQuiz.shop - Sistema de Quizzes Simplificado</p>
+        </div>
+    </div>
+</body>
+</html>

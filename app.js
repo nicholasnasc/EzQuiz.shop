@@ -5,8 +5,14 @@ const path = require('path');
 const fs = require('fs');
 require('dotenv').config();
 
+// Importar servidor de documentação
+const DocsServer = require('./docs-server');
+
 const app = express();
 const PORT = process.env.PORT || 8080;
+
+// Inicializar servidor de documentação
+const docsServer = new DocsServer(path.join(__dirname, 'Docs'));
 
 // Configurações do Express
 app.set('view engine', 'ejs');
@@ -23,6 +29,9 @@ app.use(session({
   saveUninitialized: true,
   cookie: { secure: false }
 }));
+
+// Configurar rotas de documentação
+app.use('/docs', docsServer.middleware());
 
 // Carregar dados do quiz do arquivo JSON
 function loadQuizData() {
