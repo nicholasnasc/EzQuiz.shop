@@ -350,6 +350,170 @@
         </form>
     </div>
 
+    <!-- Configuração do Produto -->
+    <div class="quiz-config">
+        <h2>🛍️ Configuração do Produto</h2>
+        <form action="/admin/save-product" method="POST">
+            <!-- Tabs do produto -->
+            <div class="tabs">
+                <button type="button" class="tab active" onclick="showProductTab('basic')">📋 Básico</button>
+                <button type="button" class="tab" onclick="showProductTab('pricing')">💰 Preços</button>
+                <button type="button" class="tab" onclick="showProductTab('checkout')">🛒 Checkout</button>
+                <button type="button" class="tab" onclick="showProductTab('modules')">📦 Módulos</button>
+            </div>
+
+            <div class="tab-contents">
+                <!-- Configurações Básicas -->
+                <div id="basic-product-tab" class="tab-content active">
+                    <div class="form-group">
+                        <label>
+                            <input type="checkbox" name="active" <%= product.active ? 'checked' : '' %>>
+                            Produto Ativo
+                        </label>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="title">Título do Produto:</label>
+                        <input type="text" name="title" value="<%= product.title || 'Seu Método Personalizado' %>" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="subtitle">Subtítulo/Descrição:</label>
+                        <textarea name="subtitle" rows="3" required><%= product.subtitle || 'Com base nas suas respostas, criamos um método 100% personalizado para eliminar sua barriga estufada de forma natural e definitiva.' %></textarea>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="guaranteeTitle">Título da Garantia:</label>
+                        <input type="text" name="guaranteeTitle" value="<%= product.guarantee?.title || 'GARANTIA INCONDICIONAL DE 30 DIAS' %>" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="guaranteeDescription">Descrição da Garantia:</label>
+                        <textarea name="guaranteeDescription" rows="3" required><%= product.guarantee?.description || 'Se em 30 dias você não ver resultados ou não ficar satisfeita, devolvemos 100% do seu dinheiro. Sem perguntas, sem burocracia.' %></textarea>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="guaranteeDays">Dias de Garantia:</label>
+                        <input type="number" name="guaranteeDays" value="<%= product.guarantee?.days || 30 %>" min="1" max="365" required>
+                    </div>
+                </div>
+
+                <!-- Configurações de Preço -->
+                <div id="pricing-product-tab" class="tab-content">
+                    <div class="form-group">
+                        <label for="originalPrice">Preço Original (R$):</label>
+                        <input type="number" name="originalPrice" value="<%= product.price?.original || 297 %>" step="0.01" min="0" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="currentPrice">Preço Atual (R$):</label>
+                        <input type="number" name="currentPrice" value="<%= product.price?.current || 97 %>" step="0.01" min="0" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="discount">Desconto (%):</label>
+                        <input type="number" name="discount" value="<%= product.price?.discount || 67 %>" min="0" max="100" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="installmentCount">Parcelas:</label>
+                        <input type="number" name="installmentCount" value="<%= product.price?.installments?.count || 3 %>" min="1" max="12" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="installmentValue">Valor da Parcela (R$):</label>
+                        <input type="number" name="installmentValue" value="<%= product.price?.installments?.value || 32.33 %>" step="0.01" min="0" required>
+                    </div>
+                </div>
+
+                <!-- Configurações de Checkout -->
+                <div id="checkout-product-tab" class="tab-content">
+                    <div class="form-group">
+                        <label for="platform">Plataforma de Pagamento:</label>
+                        <select name="platform">
+                            <option value="monetizze" <%= product.checkout?.platform === 'monetizze' ? 'selected' : '' %>>Monetizze</option>
+                            <option value="hotmart" <%= product.checkout?.platform === 'hotmart' ? 'selected' : '' %>>Hotmart</option>
+                            <option value="eduzz" <%= product.checkout?.platform === 'eduzz' ? 'selected' : '' %>>Eduzz</option>
+                            <option value="kiwify" <%= product.checkout?.platform === 'kiwify' ? 'selected' : '' %>>Kiwify</option>
+                            <option value="stripe" <%= product.checkout?.platform === 'stripe' ? 'selected' : '' %>>Stripe</option>
+                            <option value="mercadopago" <%= product.checkout?.platform === 'mercadopago' ? 'selected' : '' %>>Mercado Pago</option>
+                            <option value="other" <%= product.checkout?.platform === 'other' ? 'selected' : '' %>>Outro</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="checkoutUrl">URL de Checkout:</label>
+                        <input type="url" name="checkoutUrl" value="<%= product.checkout?.url || 'https://go.monetizze.com.br/PRODUTO_ID' %>" required>
+                        <small style="color: #666;">Cole aqui o link gerado pela sua plataforma de pagamento</small>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="buttonText">Texto do Botão:</label>
+                        <input type="text" name="buttonText" value="<%= product.checkout?.buttonText || '🚀 SIM, QUERO TRANSFORMAR MEU CORPO AGORA!' %>" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>
+                            <input type="checkbox" name="countdownEnabled" <%= product.countdown?.enabled ? 'checked' : '' %>>
+                            Ativar Countdown
+                        </label>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="countdownHours">Horas do Countdown:</label>
+                        <input type="number" name="countdownHours" value="<%= product.countdown?.hours || 2 %>" min="1" max="24">
+                    </div>
+                </div>
+
+                <!-- Módulos (Visualização) -->
+                <div id="modules-product-tab" class="tab-content">
+                    <h3>📦 Módulos do Produto</h3>
+                    <p style="color: #666; margin-bottom: 1rem;">
+                        Os módulos são configurados no arquivo JSON. Esta visualização mostra os módulos atuais:
+                    </p>
+                    
+                    <% if (product.modules && product.modules.length > 0) { %>
+                        <% product.modules.forEach(module => { %>
+                            <div class="question-item">
+                                <div class="question-header">
+                                    <span class="question-number">Módulo <%= module.id %></span>
+                                </div>
+                                <div class="question-text"><%= module.title %></div>
+                                <div class="options-list">
+                                    <% module.items.forEach(item => { %>
+                                        <div class="option-item">• <%= item %></div>
+                                    <% }) %>
+                                </div>
+                            </div>
+                        <% }) %>
+                    <% } else { %>
+                        <p style="color: #999;">Nenhum módulo configurado ainda.</p>
+                    <% } %>
+                    
+                    <h3>🎁 Bônus</h3>
+                    <% if (product.bonuses && product.bonuses.length > 0) { %>
+                        <% product.bonuses.forEach(bonus => { %>
+                            <div class="question-item">
+                                <div class="question-header">
+                                    <span class="question-number"><%= bonus.title %></span>
+                                    <span class="question-type">R$ <%= bonus.value %></span>
+                                </div>
+                                <div class="question-text"><%= bonus.subtitle %></div>
+                                <div class="option-item"><%= bonus.description %></div>
+                            </div>
+                        <% }) %>
+                    <% } else { %>
+                        <p style="color: #999;">Nenhum bônus configurado ainda.</p>
+                    <% } %>
+                </div>
+            </div>
+
+            <button type="submit" class="btn-save">
+                💾 Salvar Configurações do Produto
+            </button>
+        </form>
+    </div>
+
     <script>
         function showTab(tabName) {
             // Remove active class from all tabs and contents
@@ -359,6 +523,16 @@
             // Add active class to clicked tab and corresponding content
             event.target.classList.add('active');
             document.getElementById(tabName + '-tab').classList.add('active');
+        }
+
+        function showProductTab(tabName) {
+            // Remove active class from all product tabs and contents
+            document.querySelectorAll('.quiz-config:last-child .tab').forEach(tab => tab.classList.remove('active'));
+            document.querySelectorAll('[id$="-product-tab"]').forEach(content => content.classList.remove('active'));
+            
+            // Add active class to clicked tab and corresponding content
+            event.target.classList.add('active');
+            document.getElementById(tabName + '-product-tab').classList.add('active');
         }
 
         // Syntax highlighting for JSON editor (basic)
@@ -372,6 +546,41 @@
                     this.style.borderColor = '#dc3545';
                 }
             });
+        }
+
+        // Auto-calculate discount percentage
+        const originalPriceInput = document.querySelector('input[name="originalPrice"]');
+        const currentPriceInput = document.querySelector('input[name="currentPrice"]');
+        const discountInput = document.querySelector('input[name="discount"]');
+
+        function calculateDiscount() {
+            const original = parseFloat(originalPriceInput.value) || 0;
+            const current = parseFloat(currentPriceInput.value) || 0;
+            
+            if (original > 0 && current > 0) {
+                const discount = Math.round(((original - current) / original) * 100);
+                discountInput.value = discount;
+            }
+        }
+
+        function calculateInstallment() {
+            const current = parseFloat(currentPriceInput.value) || 0;
+            const installmentCount = parseInt(document.querySelector('input[name="installmentCount"]').value) || 1;
+            const installmentValue = document.querySelector('input[name="installmentValue"]');
+            
+            if (current > 0 && installmentCount > 0) {
+                installmentValue.value = (current / installmentCount).toFixed(2);
+            }
+        }
+
+        if (originalPriceInput && currentPriceInput) {
+            originalPriceInput.addEventListener('input', calculateDiscount);
+            currentPriceInput.addEventListener('input', () => {
+                calculateDiscount();
+                calculateInstallment();
+            });
+            
+            document.querySelector('input[name="installmentCount"]')?.addEventListener('input', calculateInstallment);
         }
     </script>
 </body>

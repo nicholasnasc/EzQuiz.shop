@@ -185,5 +185,142 @@
         ]
       }
     ]
+  },
+  "product": {
+    "active": true,
+    "title": "Seu Método Personalizado",
+    "subtitle": "Com base nas suas respostas, criamos um método 100% personalizado para eliminar sua barriga estufada de forma natural e definitiva.",
+    "price": {
+      "original": 297,
+      "current": 97,
+      "discount": 67,
+      "installments": {
+        "count": 3,
+        "value": 32.33
+      }
+    },
+    "checkout": {
+      "platform": "monetizze",
+      "url": "https://go.monetizze.com.br/PRODUTO_ID",
+      "buttonText": "🚀 SIM, QUERO TRANSFORMAR MEU CORPO AGORA!"
+    },
+    "guarantee": {
+      "days": 30,
+      "title": "GARANTIA INCONDICIONAL DE 30 DIAS",
+      "description": "Se em 30 dias você não ver resultados ou não ficar satisfeita, devolvemos 100% do seu dinheiro. Sem perguntas, sem burocracia."
+    },
+    "countdown": {
+      "enabled": true,
+      "hours": 2
+    },
+    "modules": [
+      {
+        "id": 1,
+        "title": "📚 Módulo 1: Diagnóstico Completo",
+        "items": [
+          "Análise do seu tipo de barriga estufada",
+          "Identificação das causas específicas",
+          "Plano personalizado baseado no seu perfil",
+          "Cronograma de 30 dias detalhado"
+        ]
+      },
+      {
+        "id": 2,
+        "title": "🥗 Módulo 2: Alimentação Estratégica",
+        "items": [
+          "Cardápio anti-inflamatório personalizado",
+          "Receitas fáceis para desinchar",
+          "Lista de compras organizada",
+          "Substitutos inteligentes para seus sintomas"
+        ]
+      },
+      {
+        "id": 3,
+        "title": "💊 Módulo 3: Suplementação Natural",
+        "items": [
+          "Protocolo de suplementos naturais",
+          "Chás e infusões termogênicas",
+          "Timing correto para cada suplemento",
+          "Onde comprar com melhor preço"
+        ]
+      },
+      {
+        "id": 4,
+        "title": "🏃‍♀️ Módulo 4: Ativação Metabólica",
+        "items": [
+          "Exercícios específicos para sua idade",
+          "Rotina de 15 minutos diários",
+          "Técnicas de respiração para desinchar",
+          "Atividades para gestantes/pós-parto"
+        ]
+      }
+    ],
+    "bonuses": [
+      {
+        "id": 1,
+        "title": "🍵 BÔNUS 1",
+        "subtitle": "Receitas Detox Personalizadas",
+        "description": "15 receitas baseadas nos seus sintomas específicos",
+        "value": 67
+      },
+      {
+        "id": 2,
+        "title": "📱 BÔNUS 2",
+        "subtitle": "App de Acompanhamento",
+        "description": "Acesso ao aplicativo para monitorar progresso",
+        "value": 67
+      },
+      {
+        "id": 3,
+        "title": "👥 BÔNUS 3",
+        "subtitle": "Grupo VIP no WhatsApp",
+        "description": "Suporte direto e comunidade de apoio",
+        "value": 63
+      }
+    ],
+    "benefits": [
+      {
+        "icon": "🔥",
+        "title": "Acelerar seu metabolismo",
+        "subtitle": "Baseado no seu perfil metabólico identificado"
+      },
+      {
+        "icon": "🌿",
+        "title": "Reduzir inflamação",
+        "subtitle": "Protocolo anti-inflamatório personalizado"
+      },
+      {
+        "icon": "⚡",
+        "title": "Aumentar energia",
+        "subtitle": "Alimentos e timing corretos para você"
+      },
+      {
+        "icon": "🎯",
+        "title": "Resultados em 30 dias",
+        "subtitle": "Cronograma específico para seu perfil"
+      }
+    ],
+    "faq": [
+      {
+        "question": "Funciona mesmo para mim?",
+        "answer": "Sim! O método é adaptado para diferentes perfis e idades. Com base no seu quiz, você recebe orientações específicas para seu tipo de corpo e estilo de vida."
+      },
+      {
+        "question": "É seguro para gestantes?",
+        "answer": "Temos versões adaptadas para gestantes e lactantes, sempre respeitando cada fase da mulher. Sempre consulte seu médico antes de iniciar."
+      },
+      {
+        "question": "Quanto tempo para ver resultados?",
+        "answer": "A maioria das mulheres nota diferença na primeira semana. Resultados visíveis aparecem em 15-21 dias seguindo o protocolo corretamente."
+      },
+      {
+        "question": "Quando vou ter acesso?",
+        "answer": "Imediatamente após a confirmação do pagamento, você recebe os dados de acesso no seu e-mail cadastrado."
+      },
+      {
+        "question": "Posso parcelar o pagamento?",
+        "answer": "Sim! Você pode parcelar em até 3x sem juros no cartão de crédito, ou pagar à vista com desconto."
+      }
+    ]
   }
 }

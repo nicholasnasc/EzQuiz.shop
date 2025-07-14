@@ -5,230 +5,736 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Seu Método Personalizado - EzQuiz</title>
     <link rel="stylesheet" href="/css/styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
-        .countdown {
-            background: linear-gradient(135deg, #ff6b6b, #4ecdc4);
+        * {
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            margin: 0;
+            padding: 0;
+            line-height: 1.6;
+            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+            color: #334155;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1rem;
+        }
+        
+        /* Header Styles */
+        .hero-section {
+            text-align: center;
+            padding: 3rem 0;
+            background: linear-gradient(135deg, rgba(255,255,255,0.95) 0%, rgba(248,250,252,0.9) 100%);
+            backdrop-filter: blur(20px);
+            border-radius: 2rem;
+            margin: 2rem 1rem;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.08);
+            border: 1px solid rgba(255,255,255,0.5);
+        }
+        
+        .hero-icon {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 2rem;
+            background: linear-gradient(135deg, #ec4899, #8b5cf6);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            color: white;
+            box-shadow: 0 8px 25px rgba(236, 72, 153, 0.3);
+            animation: pulse 3s infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+        
+        .hero-title {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: #1e293b;
+            margin-bottom: 1.5rem;
+            line-height: 1.2;
+            background: linear-gradient(135deg, #1e293b, #475569);
+            background-clip: text;
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
+        }
+        
+        .hero-subtitle {
+            font-size: 1.25rem;
+            color: #64748b;
+            max-width: 600px;
+            margin: 0 auto;
+            font-weight: 400;
+            line-height: 1.6;
+        }
+        
+        /* Card Styles */
+        .card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border-radius: 1.5rem;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            margin-bottom: 2rem;
+            overflow: hidden;
+        }
+        
+        .card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 16px 40px rgba(0, 0, 0, 0.12);
+        }
+        
+        .card-header {
+            padding: 2rem 2rem 1rem;
+            text-align: center;
+        }
+        
+        .card-body {
+            padding: 0 2rem 2rem;
+        }
+        
+        .card-title {
+            font-size: 1.75rem;
+            font-weight: 700;
+            color: #1e293b;
+            margin-bottom: 1.5rem;
+            line-height: 1.3;
+        }
+        
+        /* Profile Section */
+        .profile-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+        
+        .profile-item {
+            text-align: center;
+            padding: 1.5rem;
+            border-radius: 1rem;
+            background: linear-gradient(135deg, #f8fafc, #f1f5f9);
+            border: 1px solid #e2e8f0;
+            transition: all 0.3s ease;
+        }
+        
+        .profile-item:hover {
+            transform: translateY(-2px);
+            border-color: #ec4899;
+            box-shadow: 0 8px 25px rgba(236, 72, 153, 0.15);
+        }
+        
+        .profile-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            display: block;
+        }
+        
+        .profile-title {
+            font-weight: 700;
+            color: #1e293b;
+            margin-bottom: 0.5rem;
+            font-size: 1.1rem;
+        }
+        
+        .profile-subtitle {
+            font-size: 0.9rem;
+            color: #64748b;
+            font-weight: 400;
+        }
+        
+        /* Module Grid */
+        .module-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+        
+        .module-card {
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 1.25rem;
+            padding: 2rem;
+            border: 1px solid #e2e8f0;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .module-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #ec4899, #8b5cf6);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        
+        .module-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.1);
+            border-color: #ec4899;
+        }
+        
+        .module-card:hover::before {
+            opacity: 1;
+        }
+        
+        .module-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: #1e293b;
+            margin-bottom: 1rem;
+            line-height: 1.3;
+        }
+        
+        .module-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        
+        .module-list li {
+            padding: 0.5rem 0;
+            color: #475569;
+            font-weight: 400;
+            position: relative;
+            padding-left: 1.5rem;
+        }
+        
+        .module-list li::before {
+            content: '✓';
+            position: absolute;
+            left: 0;
+            color: #10b981;
+            font-weight: 700;
+        }
+        
+        /* Bonus Section */
+        .bonus-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+        
+        .bonus-card {
+            border-radius: 1.25rem;
+            padding: 2rem 1.5rem;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+        
+        .bonus-card.yellow {
+            background: linear-gradient(135deg, #fef3c7, #fde68a);
+            border: 1px solid #f59e0b;
+        }
+        
+        .bonus-card.blue {
+            background: linear-gradient(135deg, #dbeafe, #bfdbfe);
+            border: 1px solid #3b82f6;
+        }
+        
+        .bonus-card.purple {
+            background: linear-gradient(135deg, #ede9fe, #ddd6fe);
+            border: 1px solid #8b5cf6;
+        }
+        
+        .bonus-card:hover {
+            transform: translateY(-3px) scale(1.02);
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15);
+        }
+        
+        .bonus-title {
+            font-size: 1rem;
+            font-weight: 700;
+            color: #1e293b;
+            margin-bottom: 0.5rem;
+        }
+        
+        .bonus-subtitle {
+            font-weight: 600;
+            color: #374151;
+            margin-bottom: 0.75rem;
+            font-size: 1.05rem;
+        }
+        
+        .bonus-description {
+            font-size: 0.9rem;
+            color: #6b7280;
+            line-height: 1.4;
+        }
+        
+        /* Guarantee Section */
+        .guarantee-card {
+            background: linear-gradient(135deg, #ecfdf5, #d1fae5);
+            border: 2px solid #10b981;
+            border-radius: 2rem;
+            padding: 3rem 2rem;
+            text-align: center;
+            margin: 3rem 0;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .guarantee-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(16, 185, 129, 0.05), transparent);
+            animation: shimmer 3s infinite;
+        }
+        
+        @keyframes shimmer {
+            0% { transform: translateX(-100%) translateY(-100%) rotate(45deg); }
+            100% { transform: translateX(100%) translateY(100%) rotate(45deg); }
+        }
+        
+        .guarantee-title {
+            font-size: 1.75rem;
+            font-weight: 800;
+            color: #065f46;
+            margin-bottom: 1.5rem;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .guarantee-text {
+            color: #047857;
+            font-size: 1.1rem;
+            margin-bottom: 1.5rem;
+            position: relative;
+            z-index: 1;
+            line-height: 1.6;
+        }
+        
+        .guarantee-features {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            flex-wrap: wrap;
+            font-size: 0.9rem;
+            color: #059669;
+            font-weight: 500;
+            position: relative;
+            z-index: 1;
+        }
+        
+        /* CTA Section */
+        .cta-card {
+            background: linear-gradient(135deg, #fdf2f8, #fce7f3);
+            border: 2px solid #ec4899;
+            border-radius: 2rem;
+            padding: 3rem 2rem;
+            text-align: center;
+            margin: 3rem 0;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .cta-title {
+            font-size: 1.75rem;
+            font-weight: 800;
+            color: #1e293b;
+            margin-bottom: 2rem;
+        }
+        
+        .price-section {
+            margin: 2rem 0;
+        }
+        
+        .original-price {
+            font-size: 1rem;
+            color: #6b7280;
+            text-decoration: line-through;
+            margin-bottom: 0.5rem;
+        }
+        
+        .current-price {
+            font-size: 3rem;
+            font-weight: 800;
+            color: #ec4899;
+            margin: 0.5rem 0;
+            text-shadow: 0 2px 4px rgba(236, 72, 153, 0.2);
+        }
+        
+        .price-note {
+            font-size: 0.9rem;
+            color: #6b7280;
+            margin-bottom: 0.5rem;
+        }
+        
+        .installments {
+            font-size: 0.8rem;
+            color: #9ca3af;
+        }
+        
+        .countdown-section {
+            margin: 2rem 0;
+        }
+        
+        .countdown-label {
+            font-size: 0.9rem;
+            color: #6b7280;
+            margin-bottom: 0.5rem;
+        }
+        
+        .countdown {
+            font-size: 2rem;
+            font-weight: 800;
+            font-family: 'Inter', monospace;
+            background: linear-gradient(135deg, #ec4899, #8b5cf6);
             background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        /* Button Styles */
+        .btn-primary {
+            background: linear-gradient(135deg, #ec4899, #be185d);
+            color: white;
+            border: none;
+            border-radius: 1.5rem;
+            padding: 1.25rem 2rem;
+            font-size: 1.125rem;
+            font-weight: 700;
+            font-family: 'Inter', sans-serif;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            width: 100%;
+            max-width: 500px;
+            margin: 2rem auto;
+            display: block;
+            text-decoration: none;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .btn-primary::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: left 0.5s ease;
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 35px rgba(236, 72, 153, 0.4);
+        }
+        
+        .btn-primary:hover::before {
+            left: 100%;
+        }
+        
+        .btn-primary:active {
+            transform: translateY(-1px) scale(0.98);
+        }
+        
+        .security-note {
+            font-size: 0.8rem;
+            color: #6b7280;
+            margin-top: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+        
+        /* FAQ Section */
+        .faq-item {
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 1rem;
+            padding: 2rem;
+            border: 1px solid #e2e8f0;
+            transition: all 0.3s ease;
+            margin-bottom: 1rem;
+        }
+        
+        .faq-item:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+            border-color: #ec4899;
+        }
+        
+        .faq-question {
+            font-weight: 700;
+            color: #1e293b;
+            margin-bottom: 1rem;
+            font-size: 1.1rem;
+        }
+        
+        .faq-answer {
+            color: #475569;
+            line-height: 1.6;
+        }
+        
+        /* Legal Notice */
+        .legal-notice {
+            background: #f8fafc;
+            border-radius: 1rem;
+            padding: 2rem;
+            text-align: center;
+            margin: 3rem 0;
+            border: 1px solid #e2e8f0;
+        }
+        
+        .legal-text {
+            font-size: 0.8rem;
+            color: #6b7280;
+            line-height: 1.5;
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .hero-title {
+                font-size: 2rem;
+            }
+            
+            .hero-subtitle {
+                font-size: 1.1rem;
+            }
+            
+            .hero-section {
+                margin: 1rem 0.5rem;
+                padding: 2rem 1rem;
+            }
+            
+            .card-header, .card-body {
+                padding: 1.5rem;
+            }
+            
+            .profile-grid {
+                grid-template-columns: 1fr;
+                gap: 1rem;
+            }
+            
+            .module-grid {
+                grid-template-columns: 1fr;
+                gap: 1rem;
+            }
+            
+            .bonus-grid {
+                grid-template-columns: 1fr;
+                gap: 1rem;
+            }
+            
+            .guarantee-features {
+                flex-direction: column;
+                gap: 1rem;
+            }
+            
+            .current-price {
+                font-size: 2.5rem;
+            }
+            
+            .countdown {
+                font-size: 1.5rem;
+            }
+            
+            .container {
+                padding: 0 0.5rem;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .hero-title {
+                font-size: 1.75rem;
+            }
+            
+            .card-title {
+                font-size: 1.5rem;
+            }
+            
+            .cta-title {
+                font-size: 1.5rem;
+            }
+            
+            .guarantee-title {
+                font-size: 1.5rem;
+            }
+            
+            .current-price {
+                font-size: 2rem;
+            }
         }
     </style>
 </head>
-<body class="bg-gradient-to-br from-pink-50 to-purple-50 min-h-screen">
-    <main class="container mx-auto px-4 py-8">
+<body>
+    <main class="container">
         <!-- Header Personalizado -->
-        <div class="text-center mb-12">
-            <div class="w-24 h-24 mx-auto bg-gradient-to-br from-pink-400 to-purple-500 rounded-full flex items-center justify-center text-white text-2xl font-bold mb-6">
+        <div class="hero-section">
+            <div class="hero-icon">
                 💪
             </div>
-            <h1 class="text-4xl md:text-5xl font-bold text-gray-800 mb-4">
-                Parabéns! Seu Método Está Pronto
+            <h1 class="hero-title">
+                Parabéns! <%= product.title %>
             </h1>
-            <p class="text-xl text-gray-600 max-w-2xl mx-auto leading-relaxed">
-                Com base nas suas respostas, criamos um método <strong>100% personalizado</strong> 
-                para eliminar sua barriga estufada de forma natural e definitiva.
+            <p class="hero-subtitle">
+                <%= product.subtitle %>
             </p>
         </div>
 
         <!-- Destaque do Perfil -->
-        <div class="w-full max-w-3xl mx-auto mb-12">
-            <div class="bg-white rounded-2xl p-8 shadow-lg border border-gray-100">
-                <h2 class="text-2xl font-bold text-center text-gray-800 mb-6">
+        <div class="card">
+            <div class="card-header">
+                <h2 class="card-title">
                     🎯 Seu método foi criado especificamente para:
                 </h2>
-                <div class="grid md:grid-cols-2 gap-6">
-                    <div class="text-center">
-                        <div class="text-4xl mb-3">🔥</div>
-                        <h3 class="font-bold text-gray-800 mb-2">Acelerar seu metabolismo</h3>
-                        <p class="text-gray-600 text-sm">Baseado no seu perfil metabólico identificado</p>
+            </div>
+            <div class="card-body">
+                <div class="profile-grid">
+                    <% product.benefits.forEach(function(benefit) { %>
+                    <div class="profile-item">
+                        <span class="profile-icon"><%= benefit.icon %></span>
+                        <h3 class="profile-title"><%= benefit.title %></h3>
+                        <p class="profile-subtitle"><%= benefit.subtitle %></p>
                     </div>
-                    <div class="text-center">
-                        <div class="text-4xl mb-3">🌿</div>
-                        <h3 class="font-bold text-gray-800 mb-2">Reduzir inflamação</h3>
-                        <p class="text-gray-600 text-sm">Protocolo anti-inflamatório personalizado</p>
-                    </div>
-                    <div class="text-center">
-                        <div class="text-4xl mb-3">⚡</div>
-                        <h3 class="font-bold text-gray-800 mb-2">Aumentar energia</h3>
-                        <p class="text-gray-600 text-sm">Alimentos e timing corretos para você</p>
-                    </div>
-                    <div class="text-center">
-                        <div class="text-4xl mb-3">🎯</div>
-                        <h3 class="font-bold text-gray-800 mb-2">Resultados em 30 dias</h3>
-                        <p class="text-gray-600 text-sm">Cronograma específico para seu perfil</p>
-                    </div>
+                    <% }); %>
                 </div>
             </div>
         </div>
 
         <!-- O que você vai receber -->
-        <div class="w-full max-w-4xl mx-auto mb-12">
-            <h2 class="text-3xl font-bold text-center text-gray-800 mb-8">
-                📦 O que está incluído no seu método:
-            </h2>
-            
-            <div class="grid md:grid-cols-2 gap-6">
-                <!-- Módulo 1 -->
-                <div class="bg-white rounded-xl p-6 border border-gray-200 shadow-sm">
-                    <h3 class="text-xl font-bold text-gray-800 mb-3">📚 Módulo 1: Diagnóstico Completo</h3>
-                    <ul class="space-y-2 text-gray-600">
-                        <li>✓ Análise do seu tipo de barriga estufada</li>
-                        <li>✓ Identificação das causas específicas</li>
-                        <li>✓ Plano personalizado baseado no seu perfil</li>
-                        <li>✓ Cronograma de 30 dias detalhado</li>
-                    </ul>
-                </div>
-
-                <!-- Módulo 2 -->
-                <div class="bg-white rounded-xl p-6 border border-gray-200 shadow-sm">
-                    <h3 class="text-xl font-bold text-gray-800 mb-3">🥗 Módulo 2: Alimentação Estratégica</h3>
-                    <ul class="space-y-2 text-gray-600">
-                        <li>✓ Cardápio anti-inflamatório personalizado</li>
-                        <li>✓ Receitas fáceis para desinchar</li>
-                        <li>✓ Lista de compras organizada</li>
-                        <li>✓ Substitutos inteligentes para seus sintomas</li>
-                    </ul>
-                </div>
-
-                <!-- Módulo 3 -->
-                <div class="bg-white rounded-xl p-6 border border-gray-200 shadow-sm">
-                    <h3 class="text-xl font-bold text-gray-800 mb-3">💊 Módulo 3: Suplementação Natural</h3>
-                    <ul class="space-y-2 text-gray-600">
-                        <li>✓ Protocolo de suplementos naturais</li>
-                        <li>✓ Chás e infusões termogênicas</li>
-                        <li>✓ Timing correto para cada suplemento</li>
-                        <li>✓ Onde comprar com melhor preço</li>
-                    </ul>
-                </div>
-
-                <!-- Módulo 4 -->
-                <div class="bg-white rounded-xl p-6 border border-gray-200 shadow-sm">
-                    <h3 class="text-xl font-bold text-gray-800 mb-3">🏃‍♀️ Módulo 4: Ativação Metabólica</h3>
-                    <ul class="space-y-2 text-gray-600">
-                        <li>✓ Exercícios específicos para sua idade</li>
-                        <li>✓ Rotina de 15 minutos diários</li>
-                        <li>✓ Técnicas de respiração para desinchar</li>
-                        <li>✓ Atividades para gestantes/pós-parto</li>
-                    </ul>
+        <div class="card">
+            <div class="card-header">
+                <h2 class="card-title">
+                    📦 O que está incluído no seu método:
+                </h2>
+            </div>
+            <div class="card-body">
+                <div class="module-grid">
+                    <% product.modules.forEach(function(module) { %>
+                    <div class="module-card">
+                        <h3 class="module-title"><%= module.title %></h3>
+                        <ul class="module-list">
+                            <% module.items.forEach(function(item) { %>
+                            <li><%= item %></li>
+                            <% }); %>
+                        </ul>
+                    </div>
+                    <% }); %>
                 </div>
             </div>
         </div>
 
         <!-- Bônus Exclusivos -->
-        <div class="w-full max-w-4xl mx-auto mb-12">
-            <h2 class="text-3xl font-bold text-center text-gray-800 mb-8">
-                🎁 BÔNUS EXCLUSIVOS (Valor: R$ 197)
-            </h2>
-            
-            <div class="grid md:grid-cols-3 gap-6">
-                <div class="bg-gradient-to-br from-yellow-50 to-yellow-100 rounded-xl p-6 border border-yellow-200">
-                    <h3 class="text-lg font-bold text-gray-800 mb-3">🍵 BÔNUS 1</h3>
-                    <h4 class="font-semibold mb-2">Receitas Detox Personalizadas</h4>
-                    <p class="text-sm text-gray-600">15 receitas baseadas nos seus sintomas específicos</p>
-                </div>
-                
-                <div class="bg-gradient-to-br from-blue-50 to-blue-100 rounded-xl p-6 border border-blue-200">
-                    <h3 class="text-lg font-bold text-gray-800 mb-3">📱 BÔNUS 2</h3>
-                    <h4 class="font-semibold mb-2">App de Acompanhamento</h4>
-                    <p class="text-sm text-gray-600">Acesso ao aplicativo para monitorar progresso</p>
-                </div>
-                
-                <div class="bg-gradient-to-br from-purple-50 to-purple-100 rounded-xl p-6 border border-purple-200">
-                    <h3 class="text-lg font-bold text-gray-800 mb-3">👥 BÔNUS 3</h3>
-                    <h4 class="font-semibold mb-2">Grupo VIP no WhatsApp</h4>
-                    <p class="text-sm text-gray-600">Suporte direto e comunidade de apoio</p>
+        <div class="card">
+            <div class="card-header">
+                <h2 class="card-title">
+                    🎁 BÔNUS EXCLUSIVOS (Valor: R$ <%= product.bonuses.reduce((total, bonus) => total + bonus.value, 0) %>)
+                </h2>
+            </div>
+            <div class="card-body">
+                <div class="bonus-grid">
+                    <% product.bonuses.forEach(function(bonus, index) { %>
+                    <div class="bonus-card <%= index === 0 ? 'yellow' : index === 1 ? 'blue' : 'purple' %>">
+                        <h3 class="bonus-title"><%= bonus.title %></h3>
+                        <h4 class="bonus-subtitle"><%= bonus.subtitle %></h4>
+                        <p class="bonus-description"><%= bonus.description %></p>
+                    </div>
+                    <% }); %>
                 </div>
             </div>
         </div>
 
         <!-- Garantia -->
-        <div class="w-full max-w-3xl mx-auto mb-12">
-            <div class="bg-gradient-to-br from-green-50 to-green-100 rounded-2xl p-8 border border-green-200 text-center">
-                <h2 class="text-2xl font-bold text-gray-800 mb-4">
-                    🛡️ GARANTIA INCONDICIONAL DE 30 DIAS
-                </h2>
-                <p class="text-gray-700 mb-4">
-                    Se em 30 dias você não ver resultados ou não ficar satisfeita, devolvemos 100% do seu dinheiro. 
-                    Sem perguntas, sem burocracia.
-                </p>
-                <div class="flex justify-center items-center gap-4 text-sm text-gray-600">
-                    <span>✅ Risco ZERO para você</span>
-                    <span>✅ Garantia por escrito</span>
-                    <span>✅ Suporte total</span>
-                </div>
+        <div class="guarantee-card">
+            <h2 class="guarantee-title">
+                🛡️ <%= product.guarantee.title %>
+            </h2>
+            <p class="guarantee-text">
+                <%= product.guarantee.description %>
+            </p>
+            <div class="guarantee-features">
+                <span>✅ Risco ZERO para você</span>
+                <span>✅ Garantia por escrito</span>
+                <span>✅ Suporte total</span>
             </div>
         </div>
 
         <!-- CTA Final -->
-        <div class="w-full max-w-2xl mx-auto mb-12">
-            <div class="bg-gradient-to-br from-pink-50 to-pink-100 rounded-2xl p-8 border-2 border-pink-200 text-center">
-                <h2 class="text-2xl font-bold text-gray-800 mb-4">
-                    ⏰ Última Chance - Oferta Expira em Breve!
-                </h2>
-                
-                <div class="text-center mb-6">
-                    <div class="text-sm text-gray-600 mb-2">Valor normal: <span class="line-through">R$ 297</span></div>
-                    <div class="text-4xl font-bold text-pink-600 mb-2">R$ 97</div>
-                    <p class="text-sm text-gray-600">Desconto de 67% aplicado automaticamente</p>
-                    <p class="text-xs text-gray-500 mt-1">ou 3x de R$ 32,33 sem juros</p>
-                </div>
+        <div class="cta-card">
+            <h2 class="cta-title">
+                ⏰ Última Chance - Oferta Expira em Breve!
+            </h2>
+            
+            <div class="price-section">
+                <div class="original-price">Valor normal: R$ <%= product.price.original %></div>
+                <div class="current-price">R$ <%= product.price.current %></div>
+                <p class="price-note">Desconto de <%= product.price.discount %>% aplicado automaticamente</p>
+                <p class="installments">ou <%= product.price.installments.count %>x de R$ <%= product.price.installments.value.toFixed(2) %> sem juros</p>
+            </div>
 
-                <div class="mb-6">
-                    <p class="text-sm text-gray-600 mb-2">⏰ Oferta expira em:</p>
-                    <div class="text-2xl font-mono font-bold countdown" id="countdown-product">02:00:00</div>
+            <% if (product.countdown.enabled) { %>
+            <div class="countdown-section">
+                <p class="countdown-label">⏰ Oferta expira em:</p>
+                <div class="countdown" id="countdown-product">
+                    <%= String(product.countdown.hours).padStart(2, '0') %>:00:00
                 </div>
+            </div>
+            <% } %>
 
-                <button class="btn-gradient-pink w-full relative active:scale-[.99] rounded-2xl text-lg font-bold py-4 mb-4" onclick="comprarAgora()">
-                    🚀 SIM, QUERO TRANSFORMAR MEU CORPO AGORA!
-                </button>
-                
-                <p class="text-xs text-gray-500">
-                    🔒 Pagamento 100% seguro • ✅ Acesso imediato • 🛡️ Garantia de 30 dias
-                </p>
+            <button class="btn-primary" onclick="comprarAgora()">
+                <%= product.checkout.buttonText %>
+            </button>
+            
+            <div class="security-note">
+                <span>🔒 Pagamento 100% seguro</span>
+                <span>✅ Acesso imediato</span>
+                <span>🛡️ Garantia de 30 dias</span>
             </div>
         </div>
 
         <!-- FAQ Rápido -->
-        <div class="w-full max-w-3xl mx-auto mb-12">
-            <h2 class="text-2xl font-bold text-center text-gray-800 mb-8">❓ Perguntas Frequentes</h2>
-            <div class="space-y-4">
-                <div class="bg-white rounded-xl p-6 border border-gray-200">
-                    <h3 class="font-bold text-gray-800 mb-2">Funciona mesmo para mim?</h3>
-                    <p class="text-gray-600">Sim! O método é adaptado para diferentes perfis e idades. Com base no seu quiz, você recebe orientações específicas para seu tipo de corpo e estilo de vida.</p>
+        <div class="card">
+            <div class="card-header">
+                <h2 class="card-title">❓ Perguntas Frequentes</h2>
+            </div>
+            <div class="card-body">
+                <% product.faq.forEach(function(item) { %>
+                <div class="faq-item">
+                    <h3 class="faq-question"><%= item.question %></h3>
+                    <p class="faq-answer"><%= item.answer %></p>
                 </div>
-                
-                <div class="bg-white rounded-xl p-6 border border-gray-200">
-                    <h3 class="font-bold text-gray-800 mb-2">É seguro para gestantes?</h3>
-                    <p class="text-gray-600">Temos versões adaptadas para gestantes e lactantes, sempre respeitando cada fase da mulher. Sempre consulte seu médico antes de iniciar.</p>
-                </div>
-                
-                <div class="bg-white rounded-xl p-6 border border-gray-200">
-                    <h3 class="font-bold text-gray-800 mb-2">Quanto tempo para ver resultados?</h3>
-                    <p class="text-gray-600">A maioria das mulheres nota diferença na primeira semana. Resultados visíveis aparecem em 15-21 dias seguindo o protocolo corretamente.</p>
-                </div>
-                
-                <div class="bg-white rounded-xl p-6 border border-gray-200">
-                    <h3 class="font-bold text-gray-800 mb-2">Quando vou ter acesso?</h3>
-                    <p class="text-gray-600">Imediatamente após a confirmação do pagamento, você recebe os dados de acesso no seu e-mail cadastrado.</p>
-                </div>
-
-                <div class="bg-white rounded-xl p-6 border border-gray-200">
-                    <h3 class="font-bold text-gray-800 mb-2">Posso parcelar o pagamento?</h3>
-                    <p class="text-gray-600">Sim! Você pode parcelar em até 3x sem juros no cartão de crédito, ou pagar à vista com desconto.</p>
-                </div>
+                <% }); %>
             </div>
         </div>
 
         <!-- Aviso Legal -->
-        <div class="w-full max-w-4xl mx-auto mb-8">
-            <div class="text-center text-xs text-gray-500 bg-gray-50 rounded-lg p-4">
-                <p class="mb-2">
-                    <strong>Aviso importante:</strong> Os resultados podem variar de pessoa para pessoa. 
-                    Este produto não se destina a diagnosticar, tratar, curar ou prevenir qualquer doença.
-                </p>
-                <p>
-                    Consulte sempre um profissional de saúde antes de iniciar qualquer programa de emagrecimento.
-                </p>
+        <div class="legal-notice">
+            <div class="legal-text">
+                <p><strong>Aviso importante:</strong> Os resultados podem variar de pessoa para pessoa. 
+                Este produto não se destina a diagnosticar, tratar, curar ou prevenir qualquer doença.</p>
+                <p>Consulte sempre um profissional de saúde antes de iniciar qualquer programa de emagrecimento.</p>
             </div>
         </div>
         
@@ -236,8 +742,15 @@
 
     <script src="/js/script.js"></script>
     <script>
+        // Configurações do produto vindas do servidor
+        const productConfig = {
+            countdownHours: <%= product.countdown.hours %>,
+            countdownEnabled: <%= product.countdown.enabled %>,
+            checkoutUrl: '<%= product.checkout.url %>'
+        };
+        
         // Countdown Timer para produto
-        let timeLeft = 2 * 60 * 60; // 2 horas em segundos
+        let timeLeft = productConfig.countdownHours * 60 * 60; // horas em segundos
         
         function updateCountdown() {
             const hours = Math.floor(timeLeft / 3600);
@@ -256,12 +769,19 @@
         }
         
         function comprarAgora() {
-            // Aqui você pode integrar com sua plataforma de pagamento
-            alert('Redirecionando para pagamento...\n\nIntegre aqui com:\n• Mercado Pago\n• PayPal\n• Stripe\n• Ou sua plataforma preferida');
+            // Redirecionar para o link de checkout configurado
+            if (productConfig.checkoutUrl && productConfig.checkoutUrl !== 'https://go.monetizze.com.br/PRODUTO_ID') {
+                window.open(productConfig.checkoutUrl, '_blank');
+            } else {
+                alert('Link de checkout não configurado!\n\nPor favor, configure o link na dashboard administrativa.');
+            }
         }
         
-        updateCountdown();
-        setInterval(updateCountdown, 1000);
+        // Inicializar countdown se habilitado
+        if (productConfig.countdownEnabled) {
+            updateCountdown();
+            setInterval(updateCountdown, 1000);
+        }
     </script>
 </body>
 </html>

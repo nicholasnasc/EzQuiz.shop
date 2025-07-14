@@ -173,6 +173,7 @@ app.get('/admin/dashboard', requireAuth, (req, res) => {
   
   res.render('admin/dashboard', { 
     quiz: quizConfig.quiz,
+    product: quizConfig.product || {},
     success: req.query.success,
     error: req.query.error
   });
@@ -181,13 +182,15 @@ app.get('/admin/dashboard', requireAuth, (req, res) => {
 app.post('/admin/save-quiz', requireAuth, (req, res) => {
   try {
     const { title, description, questions } = req.body;
+    const currentData = loadQuizData();
     
     const quizData = {
       quiz: {
         title,
         description,
         questions: JSON.parse(questions)
-      }
+      },
+      product: currentData.product || {}
     };
     
     if (saveQuizData(quizData)) {
@@ -200,8 +203,65 @@ app.post('/admin/save-quiz', requireAuth, (req, res) => {
   }
 });
 
+app.post('/admin/save-product', requireAuth, (req, res) => {
+  try {
+    const currentData = loadQuizData();
+    const productData = {
+      active: req.body.active === 'on',
+      title: req.body.title,
+      subtitle: req.body.subtitle,
+      price: {
+        original: parseFloat(req.body.originalPrice),
+        current: parseFloat(req.body.currentPrice),
+        discount: parseInt(req.body.discount),
+        installments: {
+          count: parseInt(req.body.installmentCount),
+          value: parseFloat(req.body.installmentValue)
+        }
+      },
+      checkout: {
+        platform: req.body.platform,
+        url: req.body.checkoutUrl,
+        buttonText: req.body.buttonText
+      },
+      guarantee: {
+        days: parseInt(req.body.guaranteeDays),
+        title: req.body.guaranteeTitle,
+        description: req.body.guaranteeDescription
+      },
+      countdown: {
+        enabled: req.body.countdownEnabled === 'on',
+        hours: parseInt(req.body.countdownHours)
+      },
+      modules: currentData.product?.modules || [],
+      bonuses: currentData.product?.bonuses || [],
+      benefits: currentData.product?.benefits || [],
+      faq: currentData.product?.faq || []
+    };
+    
+    const fullData = {
+      quiz: currentData.quiz,
+      product: productData
+    };
+    
+    if (saveQuizData(fullData)) {
+      res.redirect('/admin/dashboard?success=Produto+salvo+com+sucesso');
+    } else {
+      res.redirect('/admin/dashboard?error=Erro+ao+salvar+produto');
+    }
+  } catch (error) {
+    console.error('Erro ao salvar produto:', error);
+    res.redirect('/admin/dashboard?error=Erro+ao+processar+dados+do+produto');
+  }
+});
+
 app.get('/produto', (req, res) => {
-  res.render('produto');
+  const quizConfig = loadQuizData();
+  if (!quizConfig || !quizConfig.product) {
+    return res.status(500).send('Erro ao carregar dados do produto');
+  }
+  
+  res.render('produto', { product: quizConfig.product });
 });
 
 // Middleware de erro 404
